@@ -107,18 +107,17 @@ sp\'ecification qu'elles supportent. Les utilisateurs de ces biblioth\`eques doi
 
 \subsection{Mod\`ele de programmation}
 
-\`A l'origine, MPI a été con\c{c}u pour des architectures \`a m\'emoires distribu\'ees qui avaient commenc\'e' \`a \'emerger \`a
-cette \'epoque ( Fin des ann\'ees 1980 -- début des ann\'ees 1990 )
+\`A l'origine, MPI a été con\c{c}u pour des architectures \`a m\'emoires distribu\'ees qui avaient commenc\'e \`a \'emerger \`a
+cette \'epoque (fin des ann\'ees 1980 -- début des ann\'ees 1990).
 
 Au fur et \`a mesure du changement des architectures des ordinateurs, les mises en {\oe}uvres de MPI ont adapt\'e leurs
-biblioth\`eques aux architectures multi-c{\oe}urs avec m\'emoire partag\'ee et aux diff\'erents protocols r\'eseaux.
+biblioth\`eques aux architectures multi-c{\oe}urs avec m\'emoire partag\'ee et aux diff\'erents protocoles r\'eseaux.
 
 Aujourd'hui, MPI s'ex\'ecute sur virtuellement n'importe quelle plateforme :
-
 \begin{itemize}
-\item En m\'emoire distribu\'ee
-\item En m\'emoire partag\'ee
-\item En m\'emoire hybride ( distribu\'ee et partag\'ee )
+\item en m\'emoire distribu\'ee;
+\item en m\'emoire partag\'ee;
+\item en m\'emoire hybride (distribu\'ee et partag\'ee).
 \end{itemize}
 
 N\'eanmoins, le mod\`ele de programmation reste clairement un mod\`ele de \textbf{programmation sur m\'emoire distribu\'ee} sans 
@@ -155,7 +154,7 @@ Le fichier d'entête est nécessaire pour toute utilisation de la bibliothèque 
 # include <mpi.h>
 \end{lstlisting}
 
-Les fonctions de l'interface MPI sont de la forme : \texttt{rc = MPI\_Xxxxxxxx(paramêtre, paramêtre, ....)}.
+Les fonctions de l'interface MPI sont de la forme : \texttt{rc = MPI\_Xxxxxxxx(paramètre, paramètre, ....)}.
 
 Par exemple, 
 \begin{lstlisting}[style=customcpp]
@@ -171,7 +170,7 @@ autre que \texttt{MPI\_SUCCESS}. Les types d'erreurs affichés à destination de
 \subsection{Communicateurs et groupe}
 
 MPI utilise des objets appelés communicateurs et des groupes qui définissent un ensemble de processus
-qui devront communiquer ( échanger des messages ) entre eux. La majorité des fonctions MPI demande un
+qui devront communiquer (échanger des messages) entre eux. La majorité des fonctions MPI demandent un
 communicateur en argument.
 
 \`A l'initialisation de MPI, un communicateur  est prédéfini : MPI\_COMM\_WORLD. Il inclut tous les
@@ -184,7 +183,7 @@ dépasse le cadre de ce cours.
 \section{Fonctions de gestion de l'environnement}
 
 Ces fonctions sont utilisées pour interroger et définir l'environnement d'exécution MPI, et couvrent divers buts comme
-l'initialisation et la terminaison de l'environnement MPI, interroger l'identifiant du processus ou la version de MPI utilisée, etc. 
+l'initialisation et la terminaison de l'environnement MPI, l'interroger de l'identifiant du processus ou la version de MPI utilisée, etc. 
 
 \subsection{Les fonctions de gestion de l'environnement}
 
@@ -203,10 +202,11 @@ Les routines les plus communes sont :
 \paragraph{\textcolor{blue}{\texttt{MPI\_Comm\_rank(comm,\&rank)}}}
 
   Retourne le rang du processus MPI appelant dans le communicateur spécifié. Initialement, chaque processus se fera
-  assigné un entier unique nommé \textsl{rang} entre 0 et le nombre de tâches -1 dans le communicateur
+  assigner un entier unique nommé \textsl{rang} entre 0 et le nombre de tâches
+  -\ 1 dans le communicateur
   \texttt{MPI\_COMM\_WORLD}. Ce rang est souvent référé comme l'identité de la tâche. Si un processus devient
-  associé avec d'autres communicateurs, il aura un rang unique ( différent de celui attribué dans
-  \texttt{MPI\_COMM\_WORLD} ! ) pour chacun de ces communicateurs.
+  associé avec d'autres communicateurs, il aura un rang unique (différent de celui attribué dans
+  \texttt{MPI\_COMM\_WORLD}\ !) pour chacun de ces communicateurs.
 
 \paragraph{\textcolor{blue}{\texttt{MPI\_Abort(comm,errocode)}}}
 
@@ -259,9 +259,9 @@ Pour compiler un programme utilisant MPI, il est conseillé d'utiliser les outil
 bibliothèque. Ces outils vont automatiquement trouver les bons chemins pour les fichiers d'entêtes et les bibliothèques
 utilisées par la mise en {\oe}uvre de MPI employée :
 \begin{itemize}
-\item[\texttt{mpicc}] : Permet de compiler des sources C. Prends les mêmes arguments de compilation que le compiteur local ( GNU C sous Linux par exemple )
-\item[\texttt{mpiCC}] : Permet de compiler des sources C++. Prends les mêmes arguments de compilation que le compiteur local ( GNU C++ sous Linux par exemple )
-\item[\texttt{mpif90}] : Permet de compiler des sources Fortran 90. Prends les mêmes arguments de compilation que le compiteur local ( GNU Fortran sous Linux par exemple )
+\item[\texttt{mpicc}] : Permet de compiler des sources C. Prend les mêmes arguments de compilation que le compilateur local (GNU C sous Linux par exemple).
+\item[\texttt{mpiCC}] : Permet de compiler des sources C++. Prend les mêmes arguments de compilation que le compiteur local (GNU C++ sous Linux par exemple).
+\item[\texttt{mpif90}] : Permet de compiler des sources Fortran 90. Prend les mêmes arguments de compilation que le compiteur local (GNU Fortran sous Linux par exemple).
 \end{itemize}
 
 Pour exécuter en parallèle sur $n$ tâches un programme MPI, on utilise l'exécutable \texttt{mpiexec} fourni en
@@ -271,7 +271,7 @@ standard avec MPI. Son utilisation est la suivante :
 
 où
 \begin{itemize}
-\item \textbf{$<$program$>$} est le nom de l'exécutable à lancer. Il est identifié comme le premier argument non reconnu par MPI
+\item \textbf{$<$program$>$} est le nom de l'exécutable à lancer. Il est identifié comme le premier argument non reconnu par MPI.
 \item \texttt{[ $<$args$>$ ]} : Passe les arguments $<$args$>$  à tous les processus créés par MPI. Ils devront toujours être les derniers arguments de mpiexec. 
 \item Les options que l'on peut passer à mpiexec sont les suivantes :
 \begin{itemize}
@@ -294,7 +294,7 @@ où \verb@aa@, \verb@bb@ et \verb@cc@ sont des noms de machines, et \verb@a1@, \
 
 \paragraph{Un hello World parallèle}
 
-\'Ecrire un programme qui pour chaque processus affichera à l'écran le message suivant :
+\'Ecrire un programme qui, pour chaque processus, affichera à l'écran le message suivant :
 \begin{verbatim}
 Bonjour, je suis la tâche n° xx sur yy tâches.
 \end{verbatim}
@@ -305,17 +305,17 @@ où \verb@xx@ est le rang de la tâche et \verb@yy@ le nombre de tâches lancée
 \subsection{Les types d'opérations point à point}
 
 Les fonctions d'échanges de messages point à point permettent d'échanger des messages
-entre deux, et seulement deux tâches. Une des tâches se charge de l'envoi de données
+entre deux -- et seulement deux -- tâches. Une des tâches se charge de l'envoi de données
 tandis que l'autre tâche se charge de la réception correspondante.
 
 Il y a différents types d'envoi ou de réception, utilisés pour différents buts. Par exemple :
 \begin{itemize}
-\item Les envois synchrones;
-\item Les envois/réceptions bloquants;
-\item Les envois/réceptions non bloquants;
-\item Les envois mis en buffer;
-\item Les envois/réceptions combinés;
-\item Les envois ``prêts''
+\item les envois synchrones;
+\item les envois/réceptions bloquants;
+\item les envois/réceptions non bloquants;
+\item les envois mis en buffer;
+\item les envois/réceptions combinés;
+\item les envois ``prêts''.
 \end{itemize}
 
 \`A noter que tout type d'envoi peut être reçu avec tout type de réception.
@@ -323,19 +323,19 @@ Il y a différents types d'envoi ou de réception, utilisés pour différents bu
 MPI fournit en outre plusieurs routines associées avec les envois et les réceptions telle que celles utilisées
 pour tester si un message a bien été reçu, ou si un message est prêt à la réception.
 
-Les données sont transmises via un message lequel est constitué :
+Les données sont transmises via un message, lequel est constitué :
 \begin{itemize}
-\item \textcolor{blue}{\`A l'envoi} : Du numéro de la tâche destinataire, d'un numéro permettant d'identifier
-le message ( à la réception ), des données, de la quantité de donnée et du type de données à envoyer;
-\item \textcolor{blue}{\`A la réception} : Du numéro de la tâche expéditrice ( peut être \texttt{MPI\_ANY\_TAG} ), 
+\item \textcolor{blue}{\`A l'envoi} : du numéro de la tâche destinataire, d'un numéro permettant d'identifier
+le message (à la réception), des données, de la quantité de donnée et du type de données à envoyer.
+\item \textcolor{blue}{\`A la réception} : du numéro de la tâche expéditrice (peut être \texttt{MPI\_ANY\_TAG}), 
 du numéro identifiant le message attendu
 (mais on peut très bien passer \texttt{MPI\_ANY\_TAG} pour recevoir le premier message provenant de
-l'expéditeur ), de l'adresse de la zone mémoire où on recevra les données, de la quantité des données
+l'expéditeur), de l'adresse de la zone mémoire où on recevra les données, de la quantité de données
 attendues et du type de données attendues.
-d\end{itemize}
+\end{itemize}
 
 Le type des données est passé à l'aide d'une structure MPI, \texttt{MPI\_Datatype}, qui peut prendre les valeurs données dans le
-tableau suivant ( avec le type correspondant ) :
+tableau suivant (avec le type correspondant) :
 
 \begin{center}
 \begin{tabular}{|c|c|}\hline
@@ -366,14 +366,14 @@ en réalité c'est rarement le cas. D'une certaine manière, la bibliothèque MP
 
 Par exemple :
 \begin{itemize}
-\item Une opération d'envoi a lieu cinq secondes avant que le réception soit prête -- où se trouve le message avant que la
+\item Une opération d'envoi a lieu cinq secondes avant que la réception soit prête -- où se trouve le message avant que la
 réception soit faite ?
-\item Plusieurs envois arrivent simultanément sur la même tâche qui ne peut accepter qu'une réception à la fois -- que devienne
+\item Plusieurs envois arrivent simultanément sur la même tâche qui ne peut accepter qu'une réception à la fois -- que deviennent
 les messages en attente de réception ?
 \end{itemize}
 
 La mise en {\oe}uvre de la bibliothèque MPI utilisée décide de la gestion de ces données dans tous les cas qui se présentent
-( cette gestion ne fait pas partie du standard ! ). Typiquement, une zone  \textbf{buffer système} est réservée pour contenir les données
+(cette gestion ne fait pas partie du standard !). Typiquement, une zone  \textbf{buffer système} est réservée pour contenir les données
 en transit. 
 
 \begin{center}
@@ -416,11 +416,11 @@ en transit.
 
 Cette zone privée est :
 \begin{itemize}
-\item Opaque au programmeur et entièrement gérée par la bibliothèque MPI employée;
-\item Une ressource finie qui peut être facilement épuisée;
-\item Souvent mystérieuse et mal documentée;
-\item Capable d'exister du côté de l'envoi, de la réception ou des deux à la fois;
-\item Quelque chose qui devrait améliorer les performances du programme car il permet l'envoi et
+\item opaque au programmeur et entièrement gérée par la bibliothèque MPI employée;
+\item une ressource finie qui peut être facilement épuisée;
+\item souvent mystérieuse et mal documentée;
+\item capable d'exister du côté de l'envoi, de la réception ou des deux à la fois;
+\item quelque chose qui devrait améliorer les performances du programme car permettant l'envoi et
 la réception en asynchrone. 
 \end{itemize}
 
@@ -432,21 +432,21 @@ buffer d'envoi dans cet espace.
 La plupart des routines point à point de MPI peuvent être utilisées en communication bloquante ou non bloquante. 
 
 \begin{itemize}
-\item[bloquant]
+\item[Bloquant]
   \begin{itemize}
   \item Un envoi bloquant rendra la main seulement après s'être assuré que modifier le buffer d'application est ``sûr''.
 ``Sûr'' signifie ici que ces modifications n'altérera pas les données qui devront être reçues par la tâche destinataire -- elles peuvent
 par contre être stockées dans un buffer système.
-\item Un envoie bloquant peut être synchrone ce qui signifie qu'il y a un échange d'information avec la tâche destinataire pour
+\item Un envoi bloquant peut être synchrone, ce qui signifie qu'il y a un échange d'information avec la tâche destinataire pour
 confirmer que l'envoi est sûr;
 \item Un envoi bloquant peut être asynchrone si un buffer système est utilisé pour contenir les données à envoyer au destinataire;
 \item Une réception bloquante rend la main seulement après que les données soient arrivées et prêtes à être utilisées par
 l'utilisateur.
   \end{itemize}
-\item[non bloquant]
+\item[Non bloquant]
 \begin{itemize}
-\item Les envois et réceptions non bloquantes se comportent de manière similaire -- ils rendent la main immédiatement. Ils n'attendent pas
-qu'une étape de communication soit finie tel que le copie du buffer d'application vers le buffer système ou l'arrivée du message attendu;
+\item Les envois et réceptions non bloquants se comportent de manière similaire -- ils rendent la main immédiatement. Ils n'attendent pas
+qu'une étape de communication soit finie, telle que la copie du buffer d'application vers le buffer système ou l'arrivée du message attendu;
 \item Les opérations non bloquantes interrogent simplement la bibliothèque MPI pour exécuter les opérations quand elles sont valides. L'utilisateur
 ne peut pas deviner le moment où cela va se passer;
 \item Il est dangereux de modifier le buffer d'application tant que vous n'êtes pas certain que l'opération non bloquante demandée se soit
@@ -505,13 +505,13 @@ Les communications points à points MPI prennent en général une liste d'argume
 où
 \begin{itemize}
 \item[{\bf buffer}] Adresse référençant les variables à envoyer ou recevoir. Dans la majorité des cas, c'est simplement le nom
-de la variable qui doit être envoyée ou dans laquelle on reçoit. Si c'est un simple scalaire, on passe la variable par adresse
+de la variable qui doit être envoyée ou dans laquelle on reçoit. Si c'est un simple scalaire, on passe la variable par adresse,
 ce qui se traduit en C par un symbole \& avant la variable.
 \item[{\bf count}] Indique dans le cas d'un tableau le nombre d'éléments du tableau à envoyer.
 \item[{\bf type}]  Pour des raisons de portabilité, MPI prédéfinit des types de données élémentaires. Voir la table donnée préalablement
 pour les types fournis par MPI.
-\item[{\bf Destination}] Un argument pour les routines d'envoi spécifiant le numéro de la tâche destinée à recevoir le message;
-\item[{\bf Source}] Spécifie le numéro de la tâche dont on attend le message. Ce numéro peut être un ``joker'' et on peut attendre un message
+\item[{\bf dest}] Un argument pour les routines d'envoi spécifiant le numéro de la tâche destinée à recevoir le message;
+\item[{\bf source}] Spécifie le numéro de la tâche dont on attend le message. Ce numéro peut être un ``joker'' et on peut attendre un message
 provenant de n'importe quelle tâche grâce à la variable \texttt{MPI\_ANY\_SOURCE}.
 \item[{\bf idtag}] Un entier arbitraire donné par le programmeur pour identifier son message. Ce nombre peut être compris entre 0
 et 32767. En réception, la routine attend un message portant cet identifiant pour le recevoir. On peut là encore utiliser un ``joker''
@@ -521,7 +521,7 @@ on utilise par défaut \texttt{MPI\_COMM\_WORLD}.
 \item[{\bf status}] Pour une opération de réception, indique la source et l'identifiant du message. En C, c'est un pointeur sur une structure
 de type \texttt{MPI\_Status}. 
 \item[{\bf request}] Pour les opérations non bloquantes, c'est une structure opaque servant à analyser l'état de l'envoi ou de la réception.
-Cette variable sera utilisée ensuite pour synchroniser la réception ou l'envoi ( à l'aide d'une routine de type \texttt{MPI\_Wait} ).
+Cette variable sera utilisée ensuite pour synchroniser la réception ou l'envoi (à l'aide d'une routine de type \texttt{MPI\_Wait}).
 \end{itemize}
 
 \paragraph{Fonctions d'échange de message bloquantes}
@@ -530,7 +530,7 @@ Cette variable sera utilisée ensuite pour synchroniser la réception ou l'envoi
 \item \textcolor{blue}{\texttt{MPI\_Send}} :
 
 C'est l'opération basique d'envoi bloquant. La fonction ne rend la main que lorsque le buffer d'application dans la tâche est de nouveau libre
-à être reutilisée. 
+pour être reutilisé. 
 
 \begin{lstlisting}[style=customcpp]
 MPI_Send (&buf,count,datatype,dest,tag,comm) 
@@ -549,7 +549,7 @@ MPI_Send(mybuf, 100, MPI_DOUBLE, rank+1, 0, MPI_COMM_WORLD );
 Reçoit un message. Ne rend pas la main jusqu'à ce que le buffer d'application  soit utilisable par l'utilisateur.
 
 \begin{lstlisting}[style=customcpp]
-MPI_Recv (&buf,count,datatype,dest,tag,comm, &status) 
+MPI_Recv (&buf,count,datatype,source,tag,comm, &status) 
 \end{lstlisting}
 
 
@@ -565,7 +565,7 @@ MPI_Recv(buf, 100, MPI_DOUBLE, rank-1, 0, MPI_COMM_WORLD, &status );
 \item \textcolor{blue}{\texttt{MPI\_Ssend}}
 
 Envoi bloquant synchrone. Envoie un message et attend que le buffer d'application dans la tâche émettrice
-puisse de nouveau être reutilisée et que la tâche destinataire ait commencé à recevoir le message.
+puisse de nouveau être reutilisé et que la tâche destinataire ait commencé à recevoir le message.
 
 \begin{lstlisting}[style=customcpp]
 MPI_Ssend( &buf, count, datatype, dest, tag, comm)
@@ -581,7 +581,7 @@ MPI_Ssend( buffer, 255, MPI_DOUBLE, rank+1, 30, MPI_COMM_WORLD );
 
 \item \textcolor{blue}{\texttt{MPI\_Sendrecv}}
 
-Envoie un message puis attent une réception avant de bloquer. Bloque jusqu'à ce que le buffer d'application
+Envoie un message puis attend une réception avant de bloquer. Bloque jusqu'à ce que le buffer d'application
 d'envoi soit de nouveau disponible pour utilisation et que le buffer d'application de réception contienne
 le message reçu.
 
@@ -610,8 +610,8 @@ MPI_Sendrecv( sendBuf, 1, MPI_DOUBLE, rank+1, 101,
 
 Effectue un test bloquant sur un message. Les ``jokers'' \texttt{MPI\_ANY\_SOURCE} et \texttt{MPI\_ANY\_TAG} peuvent être utilisés
 pour tester un message provenant de n'importe quelle tâche ou identifié par n'importe quel nombre. \`A la sortie de la fonction,
-le numéro de l'expéditeur et le numéro identifiant le message seront retournés dans le paramêtre \texttt{status} ( à l'aide
-de \texttt{status.MPI\_SOURCE} et \texttt{status.MPI\_TAG}.
+le numéro de l'expéditeur et le numéro identifiant le message seront retournés dans le paramètre \texttt{status} (à l'aide
+de \texttt{status.MPI\_SOURCE} et \texttt{status.MPI\_TAG}).
 
 \begin{lstlisting}[style=customcpp]
 MPI_Probe( source, tag, comm, &status );
@@ -699,7 +699,7 @@ fonctions \texttt{MPI\_Wait} ou \texttt{MPI\_Test} pour s'assurer que le message
 reçu est valable dans le buffer d'application.
 
 \begin{lstlisting}[style=customcpp]
-MPI_Irecv( &buf, count, datatype, dest, tag, comm, &request )
+MPI_Irecv( &buf, count, datatype, source, tag, comm, &request )
 \end{lstlisting}
 
 \item \textcolor{blue}{\texttt{MPI\_Issend}}
@@ -840,12 +840,12 @@ On veut faire circuler un jeton dans un réseau topologiquement équivalent
 
 L'algorithme de circulation du jeton pour \texttt{nbp} tâches est le suivant :
 \begin{enumerate}
-\item La première tâche (tâche 0) génère un entier (dont la valeurs est choisi arbitrairement par le
+\item La première tâche (tâche 0) génère un entier (dont la valeur est choisi arbitrairement par le
   programmeur, et considéré ici comme le jeton), et l'envoie au processus suivant (le processus 1);
-  Il reçoit ensuite le jeton du processus \texttt{nbp}-1 et affiche sa valeurs;
+  Il reçoit ensuite le jeton du processus \texttt{nbp}-1 et affiche sa valeur;
 \item Le processus 1 reçoit le jeton, incrémente sa valeur de 1 et l'envoie au prochain processus;
 \item \ldots
-\item Le processus $p$ reçoit le jeton, l'incrément de 1 et l'envoie au processus suivant
+\item Le processus $p$ reçoit le jeton, l'incrémente de 1 et l'envoie au processus suivant
 (processus $p+1$);
 \item \ldots
 \item Le dernier processus (processus \texttt{nbp}-1) reçoit le jeton, l'incrémente de 1 et
@@ -859,24 +859,24 @@ compilez et testez sur divers nombres de tâches.
 \begin{minipage}{\textwidth}
 \underline{Astuce} : \\
 \begin{enumerate}
- \item Lorsque vous programmez en parallèle, essayez de penser au niveau local d'un processus et non au niveau global (sur tous les processus)
- \item Pour déboguer votre programme, n'hésitez pas à écrire des messages avant et après envoie/réception de messages, suivit d'un
+ \item Lorsque vous programmez en parallèle, essayez de penser au niveau local d'un processus et non au niveau global (sur tous les processus).
+ \item Pour déboguer votre programme, n'hésitez pas à écrire des messages avant et après envoi/réception de messages, suivit d'un
   appel à \texttt{fflush}. En effet, il arrive souvent lors de la mise au point d'un programme en parallèle de se retrouver
   dans une situation de \textsl{dead--lock}, c'est à dire dans une situation où un ou plusieurs processus attendent indéfiniment un message
   en réception alors que ce message ne sera jamais envoyé.
 \end{enumerate} 
 \end{minipage}}
 
-\paragraph{Calcul de pi par lancé de fléchettes}
+\paragraph{Calcul de pi par lancer de fléchettes}
 
 On veut calculer la valeur de pi à l'aide de l'algorithme stochastique suivant :
 \begin{itemize}
 \item On considère le carré unité
-$\left[-1;1\right]\times \left[-1;1\right]$ dans lequel on inscrit le cercle unité de centre $(0;0)$ et de rayon $1$. 
-\item On génère des points aléatoirement dans le carré unité;
-\item On compte le nombre de points générés dans le carré qui sont aussi dans le cercle;
-\item Soit $r$ ce nombre de points dans le cercle divisé par le nombre de points total dans le carré;
-\item On calcul pi comme $\pi = 4.r$;
+$\left[-1;1\right]\times \left[-1;1\right]$ dans lequel on inscrit le cercle unité de centre $(0,0)$ et de rayon $1$.
+\item On génère des points aléatoirement dans le carré unité.
+\item On compte le nombre de points générés dans le carré qui sont aussi dans le cercle.
+\item Soit $r$ ce nombre de points dans le cercle divisé par le nombre de points
+  total dans le carré, on calcule alors pi comme $\pi = 4.r$.
 \end{itemize}
 
 Remarquez que l'erreur faite sur pi décroit quand le nombre de points générés augmente.
@@ -948,7 +948,7 @@ calcul dans le processus maître.
 \fbox{
 \begin{minipage}{\textwidth}
 \underline{Le concept} : diviser le travail parmi les tâches disponibles en communicant des données à l'aide
-d'appel à des fonctions d'envoie/réception point à point
+d'appel à des fonctions d'envoi/réception point à point
 \end{minipage} }
 
 \paragraph{Diffusion d'un entier dans un réseau hypercube\textcolor{red}{$^{\star}$}}
@@ -1010,8 +1010,12 @@ d'étapes ( et donc un maximum de communications simultanées entre tâches ).
 \draw (cd4_8) -- (cd4_12) (cd4_9) -- (cd4_13) (cd4_10)--(cd4_14) (cd4_11)--(cd4_15);
 \draw (cd4_0) -- (cd4_8) (cd4_1) -- (cd4_9) (cd4_2) -- (cd4_10) (cd4_3) -- (cd4_11) (cd4_4) -- (cd4_12) (cd4_5) -- (cd4_13) (cd4_6) -- (cd4_14) (cd4_7) -- (cd4_15);
 \draw (5.5,-0.5) node{dim. 4};
-\draw (2,-1) node{Hypercubes de dimension 0,1,2,3, et 4};
+\draw (2,-1) node{Hypercubes de dimension 0, 1, 2, 3 et 4};
 \end{tikzpicture}
 \end{center}
 
 \end{document}
+
+% Local Variables:
+% TeX-engine: luatex
+% End:
