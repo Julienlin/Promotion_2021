@@ -116,7 +116,8 @@ computeMandelbrotSet( int W, int H, int maxIter )
     }
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end-start;
-    std::cout << "Temps calcul ensemble mandelbrot : " << elapsed_seconds.count() 
+    std::cout << "["<<rank<<"] "
+              <<"Temps calcul ensemble mandelbrot : " << elapsed_seconds.count()
               << std::endl;
     return pixels;
 }
@@ -142,7 +143,11 @@ int main(int argc, char *argv[] )
  { 
    MPI_Init(&argc, &argv);
    const int W = 800;
-    const int H = 600;
+   const int H = 600;
+
+   std::chrono::time_point<std::chrono::system_clock> start, end, end2;
+   start = std::chrono::system_clock::now();
+
     // Normalement, pour un bon rendu, il faudrait le nombre d'itérations
     // ci--dessous :
     //const int maxIter = 16777216;
@@ -163,7 +168,19 @@ int main(int argc, char *argv[] )
                 MPI_COMM_WORLD               
                );
 
+      end = std::chrono::system_clock::now();
+      std::chrono::duration<double> elapsed_seconds = end-start;
+      std::cout << "["<<rank<<"] "
+                <<"Temps total : " << elapsed_seconds.count()
+                << std::endl;
+
       savePicture("mandelbrot.tga", W, H, pixels_glob, maxIter);
+
+      end2 = std::chrono::system_clock::now();
+      elapsed_seconds = end2-end;
+      std::cout << "["<<rank<<"] "
+                <<"Temps save : " << elapsed_seconds.count()
+                << std::endl;
     }
     else {
       MPI_Gather( pixels_loc.data(), W*Hloc, MPI_INT,
@@ -171,7 +188,6 @@ int main(int argc, char *argv[] )
                 0, // root
                 MPI_COMM_WORLD               
                );
-
     }
     
     MPI_Finalize();
