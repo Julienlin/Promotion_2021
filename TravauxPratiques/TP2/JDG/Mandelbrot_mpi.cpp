@@ -155,14 +155,23 @@ int main(int argc, char *argv[] )
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     int Hloc = H / size;
 
-    std::vector<int> pixels_glob(W*H);
-    MPI_Gather( pixels_loc.data(), W*Hloc, MPI_INT,
+    if (rank == 0) {
+      std::vector<int> pixels_glob(W*H);   // FIXME: ne l'allouer que sur proc 0
+      MPI_Gather( pixels_loc.data(), W*Hloc, MPI_INT,
                 pixels_glob.data(), W*Hloc, MPI_INT,
                 0, // root
                 MPI_COMM_WORLD               
                );
-    if (rank == 0) {
+
       savePicture("mandelbrot.tga", W, H, pixels_glob, maxIter);
+    }
+    else {
+      MPI_Gather( pixels_loc.data(), W*Hloc, MPI_INT,
+                NULL, W*Hloc, MPI_INT,
+                0, // root
+                MPI_COMM_WORLD               
+               );
+
     }
     
     MPI_Finalize();
