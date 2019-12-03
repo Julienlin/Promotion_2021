@@ -964,7 +964,7 @@ __global__ void addMatrix(float* A, float* B, float* C, int N)
    unsigned int iGlob = threadIdx.x + blockIdx.x * blockDim.x;
    unsigned int jGlob = threadIdx.y + blockIdx.y * blockDim.y;
    unsigned int ind   = iGlob + jGlob * N;
-  if ((threadIdx.x<N)&&(threadIdx.y<N)) C[ind] = A[ind] + B[ind];
+  if ((iGlob<N)&&(jGlob<N)) C[ind] = A[ind] + B[ind];
 }
 \end{lstlisting}
 \end{block}
