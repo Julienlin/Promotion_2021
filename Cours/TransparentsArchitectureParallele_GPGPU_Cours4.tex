@@ -209,8 +209,8 @@ global commune } : $N$ multiprocesseurs;
  Deux systèmes de numérotation de version :
  \begin{enumerate}
  \item \textbf{Numérotation du hardware} : Un numéro majeur donnant l'architecture mise en {\oe}uvre sur le GPGPU utilisé, un numéro
- mineur donnant les améliorations qui on pu y être apportés ( Exemple : parallélisme dynamique qu'à partir du hardware 3.5 ). 
- \item \textbf{Numérotation du driver} : La version de la bibliothèque Cuda utilisée ( 8.0 pour la plus récente ).
+ mineur donnant les améliorations qui ont pu y être apportées ( Exemple : parallélisme dynamique qu'à partir du hardware 3.5 ). 
+ \item \textbf{Numérotation du driver} : La version de la bibliothèque Cuda utilisée ( 10.2 pour la plus récente ).
  \end{enumerate}
  \end{block}
  
@@ -292,11 +292,11 @@ Device 0: "GeForce GTX 970M"
   \begin{enumerate}
    \item La mémoire globale est une mémoire entrelacée à 6 ou 12 voies ( dont deux de contrôle )
    de largeur 32 octets;
-   \item Les threads d'un même warp accède à la mémoire globale par accès de 128 octets : une requête pour
+   \item Les threads d'un même warp accèdent à la mémoire globale par accès de 128 octets : une requête pour
    des données sur quatre octets, deux requêtes
    pour des données de huit octets, soit une requête par demi--warp, quatre octets pour des données de seize octets,
    soit une requête par quart de warp. 
-   \item Pour cela, les données lues et écrites par un warp doivent être contigües en mémoire et alignées sur
+   \item Pour cela, les données lues et écrites par un warp doivent être contiguës en mémoire et alignées sur
    128 octets.
   \end{enumerate}
 
@@ -314,14 +314,14 @@ Device 0: "GeForce GTX 970M"
 \begin{itemize}
 \item Des centaines de fois plus rapide que la mémoire globale
   \begin{itemize}
-  \item 16 bancs peuvent être accèder simultanément sur
+  \item 16 bancs peuvent être accédés simultanément sur
     un hardware 1.X
-  \item 32 bancs peuvent être accédé simultanément sur un hardware 2.0
+  \item 32 bancs peuvent être accédés simultanément sur un hardware 2.0
   \item 32 octets consécutifs sont assignés à des bancs successifs
   \end{itemize}
 \item Des Threads d'un même bloc peuvent coopérer via la mémoire partagée
   \begin{itemize}
-  \item 16 KBytes maximum par multiprocesseur avec un hadware 1.X 
+  \item 16 KBytes maximum par multiprocesseur avec un hardware 1.X 
   \item 48 KBytes maximum par multiprocesseur avec un hardware 2.0
   \item Mais sur le hardware 2.0, la mémoire cache L1 est la même mémoire que
     la mémoire partagée : le programmeur doit contrôler la taille de mémoire utilisée
@@ -458,14 +458,14 @@ chaque thread du demi-warp accède à un banc différent.
     \item Du code C ou C++ avec fonctionnalités CUDA;
     \item Code C ou C++ ``standard''.
     \item Les extensions : ``.h'' pour les headers, ``.cu'' pour les sources.
-    \item On compile à l'aide du compilateur NVida : \texttt{nvcc}
+    \item On compile à l'aide du compilateur NVidia : \texttt{nvcc}
     \item On obtient un code CPU contenant du code GPU intégré.
     \end{itemize}
   \end{exampleblock}
 
   \begin{alertblock}{Pour les codes C/C++ simples}
     \begin{itemize}
-    \item Possibilité de tous compiler avec nvcc dans des fichiers .cu
+    \item Possibilité de tout compiler avec nvcc dans des fichiers .cu
     \item Mais les optimisations pour le CPU peuvent en souffrir.
     \end{itemize}
   \end{alertblock}
@@ -716,7 +716,7 @@ $\rightarrow$ Les qualifieurs séparent les codes \textcolor{blue}{CPU} et \text
   \begin{itemize}
   \item \textcolor{orange}{Chaque thread peut décider sur quelles données travailler}
   \item \textcolor{orange}{Block ID} : 1D, 2D ou 3D depuis Cuda 3.0
-  \item \textcolor{orange}{Thread ID}: 1D, 2D or 3D.
+  \item \textcolor{orange}{Thread ID}: 1D, 2D ou 3D.
   \end{itemize}
 \item Simplifie l'adressage mémoire quand on gère des données multidimensionnelles :
   \begin{itemize}
@@ -777,15 +777,15 @@ $\rightarrow$ Les qualifieurs séparent les codes \textcolor{blue}{CPU} et \text
 \begin{frame}[containsverbatim]{Mots clefs pour les blocs et les threads}
 \begin{minipage}{5cm}
 \begin{itemize}
-\item \textcolor{blue}{Mots clefs pour les blocs} :
+\item \textcolor{blue}{Mots clefs pour les blocs}~:
   \begin{itemize}
-  \item \textcolor{orange}{threadId.[x,y,z]} définie la position du thread dans le bloc;
-  \item \textcolor{orange}{blockDim.[x,y,z]} définie les dimensions du bloc.
+  \item \textcolor{orange}{threadId.[x,y,z]} définit la position du thread dans le bloc;
+  \item \textcolor{orange}{blockDim.[x,y,z]} définit les dimensions du bloc.
   \end{itemize}
-\item \textcolor{blue}{Mots clefs pour les grilles} :
+\item \textcolor{blue}{Mots clefs pour les grilles}~:
   \begin{itemize}
-  \item \textcolor{orange}{blockId.[x,y,z]} définie la position du bloc dans la grille
-  \item \textcolor{orange}{gridDim.[x,y,z]} définie les dimensions de la grille
+  \item \textcolor{orange}{blockId.[x,y,z]} définit la position du bloc dans la grille
+  \item \textcolor{orange}{gridDim.[x,y,z]} définit les dimensions de la grille
   \end{itemize}
 \end{itemize}
 \end{minipage}
@@ -1032,7 +1032,7 @@ tâches légère \textcolor{green}{$\rightarrow$} performance élevée.
 \item \textcolor{blue}{\texttt{cudaMalloc()}}
   \begin{itemize}
   \item Alloue des objets sur la \textbf{mémoire globale} du GPU
-  \item Deux paramêtres nécessaires :
+  \item Deux paramètres nécessaires :
     \begin{enumerate}
     \item Adresse du pointeur sur l'objet alloué;
     \item Taille de l'objet alloué;
@@ -1040,7 +1040,7 @@ tâches légère \textcolor{green}{$\rightarrow$} performance élevée.
   \end{itemize}
 \item \textcolor{blue}{cudaFree()}
   \begin{itemize}
-  \item Libère des objets de la mémoire global du GPU;
+  \item Libère des objets de la mémoire globale du GPU;
     \begin{enumerate}
     \item Pointeur sur l'objet à libérer;
     \end{enumerate}
@@ -1063,7 +1063,7 @@ cudaFree(MyMatrixOnDevice);
 \textcolor{blue}{\Large\tt cudaMemcpy()}
 \begin{itemize}
 \item Transfert de données
-\item Quatre paramêtres nécessaires :
+\item Quatre paramètres nécessaires :
   \begin{itemize}
   \item Pointeur vers la source
   \item Pointeur vers la destination
@@ -1102,8 +1102,8 @@ cudaMemcpy(MyMatrixOnHost, MyMatrixOnDevice, size,
 \begin{frame}{Déclaration de fonctions CUDA}
 
   \begin{tabular}{|c|c|c|}\hline
- & \begin{minipage}{2cm}\small Exécuté sur :\end{minipage} & 
- \begin{minipage}{2cm}\small Appelable seulement de :\end{minipage} \\ \hline \hline
+ & \begin{minipage}{2cm}\small Exécuté sur \end{minipage} & 
+ \begin{minipage}{2cm}\small Appelable seulement de \end{minipage} \\ \hline \hline
 \texttt{\textcolor{blue}{\_\_device\_\_} float DeviceFunc()} &
 GPU & GPU \\ \hline
 \texttt{\textcolor{blue}{\_\_global\_\_} void KernelFunc()} &
@@ -1113,7 +1113,7 @@ GPU & CPU \\ \hline
 \end{tabular}
 
 \begin{itemize}
-\item \texttt{\textcolor{blue}{\_\_global\_\_}} définie une fonction noyau :
+\item \texttt{\textcolor{blue}{\_\_global\_\_}} définit une fonction noyau :
 doit retourner toujours \textcolor{blue}{\tt void}.
 \item \textcolor{blue}{\tt \_\_device\_\_} fonctions sur GPU dont on ne peut
 récupérer l'adresse (semblable à des fonctions inline);
@@ -1147,9 +1147,9 @@ KernelFunc<<<DimGrid, DimBlock>>>(...);
   \begin{itemize}
   \item Choisir les nombre de threads par bloc comme un multiple de la taille d'un warp
     \begin{itemize}
-    \item Essayer d'éviter le gâchi de warp en sous effectifs
+    \item Essayer d'éviter le gâchis de warp en sous effectifs
     \end{itemize}
-  \item Plusieurs threads par bloc = meilleurs recouvrement de la lattence mémoire
+  \item Plusieurs threads par bloc = meilleur recouvrement de la latence mémoire
     \begin{itemize}
     \item L'invocation de noyau peut se planter si trop de registres utilisés.
     \end{itemize}
@@ -1159,7 +1159,7 @@ KernelFunc<<<DimGrid, DimBlock>>>(...);
       \begin{itemize}
       \item Seulement si beaucoup de blocs concurrents
       \end{itemize}
-    \item 192 ou 256 threads est un meilleurs choix  : 
+    \item 192 ou 256 threads est un meilleur choix  : 
       \begin{itemize}
       \item Généralement assez de registre pour arriver à compiler et exécuter
       \end{itemize}
@@ -1179,7 +1179,7 @@ KernelFunc<<<DimGrid, DimBlock>>>(...);
     \begin{itemize}
     \item Plusieurs blocs peuvent être en concurrence dans un multiprocesseur
     \item Les blocs qui n'attendent pas un  \texttt{\_\_syncthreads()} sont toujours actifs
-    \item Selon les resources valables -- registre, mémoire partagée
+    \item Selon les ressources valables -- registre, mémoire partagée
     \end{itemize}
   \item \# de blocs $>$ 100 pour s'adapter aux futurs hardware
     \begin{itemize}
@@ -1267,7 +1267,7 @@ void add_vector(const float* u, const float* v, float* w, int N)
 {
   int grdSize, blockSize = 256;
   float *u_dev, *b_dev, *c_dev;
-  // Alloue et copie les matrices A,B et C sur le GPU
+  // Alloue et copie les vecteurs u, v et alloue w sur le GPU
   cudaMalloc(((void**)&u_dev, sizeof(float)*N);
   cudaMemcpy(u_dev, u, sizeof(float)*N, cudaMemcpyHostToDevice);  
   cudaMalloc(((void**)&v_dev, sizeof(float)*N);
@@ -1275,7 +1275,7 @@ void add_vector(const float* u, const float* v, float* w, int N)
   cudaMalloc(((void**)&w_dev, sizeof(float)*N);
   // Calcule la configuration d'execution du noyau
   dim3 dimBlock(blockSize);
-  grdSize = (N%blockSize>0 ? N/blockSize+1, N/blockSize);
+  grdSize = (N%blockSize>0 ? N/blockSize+1: N/blockSize);
   dim3 dimGrid(grdSize);
   // Appel du noyau :
   addVector<<<dimGrid,dimBlock>>>(N,u_dev,v_dev,w_dev);  

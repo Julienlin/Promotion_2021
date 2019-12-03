@@ -82,16 +82,16 @@
 {\scriptsize
 \begin{block}{Pourquoi OpenCL}
 \begin{itemize}
-\item CUDA : bibliothèque conviviale, puissante et rapide mais \alert{uniquement portable que sur des cartes NVIDIA !};
+\item CUDA : bibliothèque conviviale, puissante et rapide mais \alert{uniquement portable sur des cartes NVIDIA !};
 \item Besoin d'avoir une bibliothèque plus universelle permettant de gérer des accélérateurs de calcul, d'autres cartes
 graphiques, utilisable sur smartphone et tablettes, etc..
-\item Permettre une accélération de cacul pour les pages web : \textcolor{blue}{WebCL}.
+\item Permettre une accélération de calcul pour les pages web : \textcolor{blue}{WebCL}.
 \end{itemize}
 \end{block}
 
 \begin{block}{OpenCL en quelques mots}
 \begin{itemize}
-\item Standard mis au point par le Khronos Group ( qui font aussi la standardisation d'OpenGL );
+\item Standard mis au point par le Khronos Group ( qui font aussi la standardisation d'OpenGL~);
 \item Permet la programmation des GPGPUs, mais aussi des CPUs ( Intel mais aussi les CELLs d'IBM );
 \item Compilateur intégré à la bibliothèque ( comme pour les shaders avec OpenGL );
 \end{itemize}
@@ -370,7 +370,7 @@ accélération à moindre coût;
 \begin{alertblock}{Contre}
 \begin{itemize}
 \item Ne permet pas des performances optimales comme Cuda;
-\item Peut de compilateur le supporte : les compilateurs PGI ( gratuits
+\item Peu de compilateur le supportent : les compilateurs PGI ( gratuits
 pour usage non commercial ) et gnu c/c++ à partir de la version 6.1 ( encore
 au stage d'ébauche ! )
 \end{itemize}
@@ -426,7 +426,7 @@ supportent que les Xeon Phi, Cray ne propose que OpenACC.
 \begin{column}{0.5\textwidth}
 \begin{exampleblock}{Pour}
 \begin{itemize}
-\item Approche unifié avec le reste d'OpenMP;
+\item Approche unifiée avec le reste d'OpenMP;
 \item Même simplicité que OpenACC;
 \item \'Evite de mélanger plusieurs directives de compilation !
 \end{itemize}
@@ -436,7 +436,7 @@ supportent que les Xeon Phi, Cray ne propose que OpenACC.
 \begin{alertblock}{Contre}
 \begin{itemize}
 \item Ne permet pas d'avoir des performances optimales;
-\item Peut de compilateur supporte OpenMP 4.0 avec GPU aujourd'hui !
+\item Peu de compilateur supportent OpenMP 4.0 avec GPU aujourd'hui !
 \end{itemize}
 \end{alertblock}
 \end{column}
