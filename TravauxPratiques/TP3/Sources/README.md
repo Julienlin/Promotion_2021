@@ -23,7 +23,7 @@ coller ici le résultats de lscpu.
 *Expliquer les paramètres, les fichiers, l'optimisation de compil, NbSamples, ...*
 
 OMP_NUM    | samples=1024 | 
------------+--------------+----------
+-----------|--------------|----------
 séquentiel |   | 
 1          |   | 
 2          |   | 
@@ -49,7 +49,7 @@ séquentiel |   |
 
 
   ordre           | time    | MFlops  | MFlops(n=2048) 
-------------------+---------+---------+----------------
+------------------|---------|---------|----------------
 i,j,k (origine)   | 2.73764 | 782.476 |                
 j,i,k             |  |  |    
 i,k,j             |  |  |    
@@ -67,7 +67,7 @@ k,j,i             |  |  |
 `make TestProduct.exe && OMP_NUM_THREADS=8 ./TestProduct.exe 1024`
 
   OMP_NUM         | MFlops  | MFlops(n=2048) | MFlops(n=512)  | MFlops(n=4096)
-------------------+---------+----------------+----------------+---------------
+------------------|---------|----------------|----------------|---------------
 1                 |  |
 2                 |  |
 3                 |  |
@@ -85,7 +85,7 @@ k,j,i             |  |  |
 `make TestProduct.exe && ./TestProduct.exe 1024`
 
   szBlock         | MFlops  | MFlops(n=2048) | MFlops(n=512)  | MFlops(n=4096)
-------------------+---------+----------------+----------------+---------------
+------------------|---------|----------------|----------------|---------------
 origine (=max)    |  |
 32                |  |
 64                |  |
@@ -102,7 +102,7 @@ origine (=max)    |  |
 
 
   szBlock      | OMP_NUM | MFlops  | MFlops(n=2048) | MFlops(n=512)  | MFlops(n=4096)
----------------+---------+---------+------------------------------------------------
+---------------|---------|---------|------------------------------------------------
 A.nbCols       |  1      |         | 
 512            |  8      |         | 
 
@@ -117,4 +117,8 @@ A.nbCols       |  1      |         |
 ```
 	env 
 	OMP_NUM_THREADS=4 ./dot_product.exe
+```
+
+```
+    $ for i in $(seq 1 4); do elap=$(OMP_NUM_THREADS=$i ./TestProductOmp.exe|grep "Temps CPU"|cut -d " " -f 7); echo -e "$i\t$elap"; done > timers.out
 ```
