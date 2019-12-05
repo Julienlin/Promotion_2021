@@ -948,7 +948,7 @@ threadIdx.z = 3
      int ind = threadIdx.x + blockIdx.x * blockDim.x;
      
      if (ind < dim)
-         w[threadIdx.x] = u[threadIdx.x]+v[threadIdx.x];
+         w[ind] = u[ind]+v[ind];
  }
  \end{lstlisting}
 \end{block}
@@ -1003,7 +1003,7 @@ matrixMul( float* C, const float* A, const float* B, int dim )
     // Chaque thread du group charge un elt des blocs courants
     // de A et de B en shared memory :
     As[threadIdx.y][threadIdx.x] = A[a + dim*threadIdx.y + threadIdx.x];
-    Bs[threadIdx.y][threadIdx.x] = A[b + dim*threadIdx.y + threadIdx.x];
+    Bs[threadIdx.y][threadIdx.x] = B[b + dim*threadIdx.y + threadIdx.x];
     // On s'assure que tous les threads ont bien remplis As et Bs :
     __syncthreads();
     // Puis multiplication des deux blocs qu'on rajoute à Csub :
