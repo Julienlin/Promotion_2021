@@ -7,7 +7,9 @@ else
 CXXFLAGS += -O3 -march=native
 endif
 
-ALL=dotproduct-omp.exe dotproduct-thread.exe 
+ALL=dotproduct-omp.exe dotproduct-thread.exe \
+    TestProduct.exe TestProduct_opt.exe TestProduct_blockomp.exe
+# bitonic.exe bitonic_thread.exe bhudda.exe bhudda_omp.exe
 
 default: help
 
@@ -19,18 +21,22 @@ clean:
 %.exe: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
 
+# dependances particulieres :
+TestProduct.exe: Matrix.cpp ProdMatMat.cpp
+TestProduct_opt.exe: Matrix.cpp ProdMatMat_opt.cpp
+TestProduct_blockomp.exe: Matrix.cpp ProdMatMat_blockomp.cpp
+bitonic.exe: Vecteur.cpp
+bitonic_thread.exe: Vecteur.cpp
+
 
 help:
-	@echo "Available targets : "
-	@echo "    all             : compile all executables"
-	@echo "    dotproduct.exe  : Compile dot product executable"
-	@echo "    TestProduct.exe : Compile matrix-matrix product executable"
-	@echo "    bitonic.exe     : Compile bitonic sort example executable"
-	@echo "    bhudda.exe      : Compile bhuddabrot set executable"
+	@echo "Available targets:"
+	@echo "    all: compile all executables"
+	@echo "       $(ALL)"
+	@echo "Configuration:"
+	@echo "    CXX     : $(CXX)"
+	@echo "    CXXFLAGS: $(CXXFLAGS)"
 	@echo "Add DEBUG=yes to compile in debug"
-	@echo "Configuration :"
-	@echo "    CXX      :    $(CXX)"
-	@echo "    CXXFLAGS :    $(CXXFLAGS)"
 
 
 # Rapport

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="./github-pandoc.css" />
+</head>
+<body>
+<nav id="TOC">
+<ul>
+<li><a href="#tp3-discussions">TP3 discussions</a><ul>
+<li><a href="#lscpu">lscpu</a></li>
+<li><a href="#produit-scalaire-dotproduct-omp.cpp">Produit scalaire dotproduct-omp.cpp</a></li>
+<li><a href="#produit-matrice-matrice">Produit matrice-matrice</a><ul>
+<li><a href="#permutation-des-boucles">Permutation des boucles</a></li>
+<li><a href="#omp-sur-la-boucle-jki">OMP sur la boucle jki</a></li>
+<li><a href="#produit-par-blocs">Produit par blocs</a></li>
+<li><a href="#bloc-omp">Bloc + OMP</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="tp3-discussions">TP3 discussions</h1>
+<h2 id="lscpu">lscpu</h2>
+<pre><code>[jd@ldmas707z Sources]$ lscpu
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                8
+On-line CPU(s) list:   0-7
+Thread(s) per core:    2
+Core(s) per socket:    4
+Socket(s):             1
+NUMA node(s):          1
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 94
+Model name:            Intel(R) Core(TM) i7-6820HQ CPU @ 2.70GHz
+Stepping:              3
+CPU MHz:               616.662
+CPU max MHz:           3600.0000
+CPU min MHz:           800.0000
+BogoMIPS:              5424.00
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              8192K
+NUMA node0 CPU(s):     0-7</code></pre>
+<p>Sur cette machine, j’ai donc 4 “vrais” coeurs, hyperthreadés (2 thread par coeur), d’où les 8 CPUs annoncés. Je peux donc espérer un speedup de 4 (sur les applications qui se parallèlisent bien), voire 8 sur certains cas.</p>
+<h2 id="produit-scalaire-dotproduct-omp.cpp">Produit scalaire dotproduct-omp.cpp</h2>
+<p>Temps (wall-clock) pour le programme (N=1023, nbSamples=100000) ; “pragma omp” appliqué à la boucle dans la fonction dot</p>
+<table>
+<thead>
+<tr class="header">
+<th>SMP</th>
+<th>-O3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>origin</td>
+<td>0.205195</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0.217259</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>0.220752</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>0.209804</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>0.209943</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>0.342044</td>
+</tr>
+</tbody>
+</table>
+<p>On ne constate aucune accélération ; c’est même légèrement contre-performant. Cela s’explique parce que ce programme est memory-bound (pour chaque donnée lue en mémoire, il n’y a qu’une opération effectuée). Donc le paralléliser ne l’accélère pas.</p>
+<h2 id="produit-matrice-matrice">Produit matrice-matrice</h2>
+<p>Ce programme est CPU-bound : il y a N^3 opérations à faire, pour 3*N^2 données. Donc on peut s’attendre à de bons speedup dans les opérations parallélisées.</p>
+<p>Attention, faire plusieurs runs ; on peut observer une forte variabilité des performances, surtout pour les petites tailles de matrice. Par exemple on peut lancer 10x le programme avec :</p>
+<pre><code>for i in `seq 1 10`; do
+    OMP_NUM_THREADS=1 ./TestProduct_opt.exe |grep MFlops
+done</code></pre>
+<p>Dans les tableaux ci-dessous, on a noté la meilleure valeur de ces 10 runs.</p>
+<h3 id="permutation-des-boucles">Permutation des boucles</h3>
+<p><code>make TestProduct.exe &amp;&amp; ./TestProduct.exe 1024</code></p>
+<table>
+<thead>
+<tr class="header">
+<th>ordre</th>
+<th>time</th>
+<th>MFlops</th>
+<th>MFlops(n=2048)</th>
+<th>MFlops(n=512)</th>
+<th>MFlops(n=4096)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>i,j,k (origine)</td>
+<td>2.73764</td>
+<td>782.476</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>j,i,k</td>
+<td>3.72883</td>
+<td>575.913</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>i,k,j</td>
+<td>12.0426</td>
+<td>172.571</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>k,i,j</td>
+<td>12.0755</td>
+<td>177.838</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>j,k,i</td>
+<td>0.45099</td>
+<td>4761.65</td>
+<td>3511.59</td>
+<td>5454.68</td>
+<td>3416.2</td>
+</tr>
+<tr class="even">
+<td>k,j,i</td>
+<td>0.46301</td>
+<td>4638.07</td>
+<td>1928.87</td>
+<td>6311.08</td>
+<td>1775.2</td>
+</tr>
+</tbody>
+</table>
+<p>Les deux meilleures permutations sont celles qui mettent l’indice i au plus bas niveau. Se référer aux explications et croquis donnés en TP : cette permutation est celle qui exploite au mieux la mémoire cache.</p>
+<p>On remarque aussi que les performances baissent quand la taille des matrices augmente : les petites matrices tiennent entièrement dans le cache.</p>
+<h3 id="omp-sur-la-boucle-jki">OMP sur la boucle jki</h3>
+<p>On décide donc de paralléliser la boucle jki par OpenMP:</p>
+<p><code>make TestProduct_opt.exe &amp;&amp; OMP_NUM_THREADS=8 ./TestProduct_opt.exe 1024</code></p>
+<table>
+<thead>
+<tr class="header">
+<th>OMP_NUM</th>
+<th>MFlops(n=1024)</th>
+<th>MFlops(n=2048)</th>
+<th>MFlops(n=4096)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>4840.25</td>
+<td>2912.19</td>
+<td>2777.49</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>9448.28</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>13823.4</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>18040.6</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>19009.2</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>20141.5</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>22080.0</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>24698.3</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>On trace cela avec gnuplot :</p>
+<pre><code>gnuplot -persist &lt;&lt; EOF 
+set xrange[0:8]
+plot &#39;MFlops.dat&#39; w lp
+replot 4840*x
+EOF</code></pre>
+<p><img src="./MFlops.png" title="MFlops for jki OpenMP" /></p>
+<p>La courbe de speedup montre des performances (quasi) parfaites jusqu’à 4 threads ; puis le gain devient plus faible à partir de la 5e thread (on voit l’effet de l’hyperthreading).</p>
+<h3 id="produit-par-blocs">Produit par blocs</h3>
+<p><code>make TestProduct_blockomp.exe &amp;&amp; OMP_NUM_THREADS=1 TestProduct_blockomp.exe 1024</code></p>
+<p>Pour le moment, on désactive les threads avec <code>OMP_NUM_THREADS=1</code> ; et on regarde l’influence de la taille de blocs :</p>
+<table>
+<thead>
+<tr class="header">
+<th>szBlock</th>
+<th>MFlops</th>
+<th>MFlops(n=2048)</th>
+<th>MFlops(n=4096)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>origine (=max)</td>
+<td>4761.65</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>32</td>
+<td>4256.9</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>64</td>
+<td>5009.49</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>128</td>
+<td>5736.18</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>256</td>
+<td>6593.25</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>512</td>
+<td>6742.56</td>
+<td>6810.54</td>
+<td>6672.42</td>
+</tr>
+<tr class="odd">
+<td>1024</td>
+<td>4758.02</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Avec le produit par blocs, on retrouve la meilleure performance du séquentiel (&gt;6700 MFlops). Pour mon ordinateur, la meilleure taille de bloc semble être 512. On peut faire le calcul, et se rendre compte que c’est presque la taille limite pour que les 3 matrices tiennent dans le cache de 8192K : 3 (matrices) * 512^2 (nombres) * 8(sizeof double) = 6144k</p>
+<p>Le point intéressant, c’est que quelle que soit la taille globale des matrices, on conserve les 6700 MFlops (alors qu’à la question 1, on avait vu que les performances se dégradaient pour les grosses matrices).</p>
+<h3 id="bloc-omp">Bloc + OMP</h3>
+<p>Les mesures pour cette question sont faites sur une autre machine, un peu plus vieille :</p>
+<pre><code>Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                8
+On-line CPU(s) list:   0-7
+Thread(s) per core:    2
+Core(s) per socket:    4
+Socket(s):             1
+NUMA node(s):          1
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 60
+Model name:            Intel(R) Core(TM) i7-4710HQ CPU @ 2.50GHz
+Stepping:              3
+CPU MHz:               1099.853
+CPU max MHz:           3500.0000
+CPU min MHz:           800.0000
+BogoMIPS:              4988.63
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              6144K
+NUMA node0 CPU(s):     0-7</code></pre>
+<p>La fréquence est 10% plus faible, la cache fait 6144K. Des blocs de 512 restent possibles (tout juste), et on devrait observer 10% de MFlops de moins.</p>
+<p>On décide de fixer le blocs à 256 pour garder un peu de marge sur la cache ; on place une directive <code>omp parallel</code> au-dessus de la boucle for la plus externe (celle sur les blocs). Et on recense les performances :</p>
+<p><code>OMP_NUM_THREADS=1 ./TestProduct_blockomp.exe 4096</code></p>
+<table>
+<thead>
+<tr class="header">
+<th>OMP_NUM</th>
+<th>MFlops(n=1024)</th>
+<th>MFlops(n=4096)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>5258.89</td>
+<td>5024.08</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>10218.1</td>
+<td>9883.77</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>10235.4</td>
+<td>13353.1</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>19898.9</td>
+<td>18945</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>19854.5</td>
+<td>14762.5</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>19720.4</td>
+<td>15493.7</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>20052.5</td>
+<td>12076.7</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>19892.5</td>
+<td>16121.7</td>
+</tr>
+</tbody>
+</table>
+<p>Pour N=1024, le speedup est proche de 2 pour 2 threads, de 4 pour 4 threads. Pour 3 threads, on n’a qu’un speedup de 2 ; il faudrait probablement jouer sur l’affinité pour placer les threads sur des CPU différents. À partir de 5 threads, on sature à un speedup de 4 ; pour n=1024, c’est normal, la boucle parallélisée n’a que 4 blocs à traiter.</p>
+<p>Pour N=4096, on a les mêmes bons speedup pour 2 et 4 threads. Pour 3, l’équilibrage s’est mieux passé que précédemment (coup de chance ?). À partir de 5 threads, les performances se dégradent, le calcul nécessite l’hyperthreading pour gérer ces threads supplémentaires.</p>
+<p>C’est le signe que l’hyperthreading n’est pas très performant sur cette génération de processeurs ; sur des machines plus récentes, on pourrait continuer à voir un gain.</p>
+<p>Pour jouer sur l’affinité, on pourrait regarder ces variables :</p>
+<pre><code>export OMP_DISPLAY_ENV=true
+OMP_PLACES=cores
+OMP_PROC_BIND=spread</code></pre>
+</body>
+</html>
