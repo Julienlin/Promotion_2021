@@ -225,3 +225,10 @@ OMP_PLACES=cores
 OMP_PROC_BIND=spread
 ```
 
+## bhudda
+
+On utilise une boucle `omp parallel for`, avec scheduler dynamic puisque chaque pixel a un coût de calcul différent. On utilise aussi `(dynamic, 100)` pour paralléliser par paquets de pixels (TODO : faire des mesures de performancesstatic/dynamic et taille de ces paquets).
+
+Bien noter aussi la ligne `atomic`, nécessaire pour éviter le risque de concurrence(race condition) sur le tableau résultat.
+
+En toute rigueur, il faudrait utiliser une "random seed" figée pour vérifier la validité de la parallélisation OpenMP proposée. 

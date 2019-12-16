@@ -25,6 +25,7 @@
 <li><a href="#produit-par-blocs">Produit par blocs</a></li>
 <li><a href="#bloc-omp">Bloc + OMP</a></li>
 </ul></li>
+<li><a href="#bhudda">bhudda</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -383,5 +384,9 @@ NUMA node0 CPU(s):     0-7</code></pre>
 <pre><code>export OMP_DISPLAY_ENV=true
 OMP_PLACES=cores
 OMP_PROC_BIND=spread</code></pre>
+<h2 id="bhudda">bhudda</h2>
+<p>On utilise une boucle <code>omp parallel for</code>, avec scheduler dynamic puisque chaque pixel a un coût de calcul différent. On utilise aussi <code>(dynamic, 100)</code> pour paralléliser par paquets de pixels (TODO : faire des mesures de performancesstatic/dynamic et taille de ces paquets).</p>
+<p>Bien noter aussi la ligne <code>atomic</code>, nécessaire pour éviter le risque de concurrence(race condition) sur le tableau résultat.</p>
+<p>En toute rigueur, il faudrait utiliser une “random seed” figée pour vérifier la validité de la parallélisation OpenMP proposée.</p>
 </body>
 </html>

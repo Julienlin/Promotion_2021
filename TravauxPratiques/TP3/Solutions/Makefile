@@ -8,8 +8,9 @@ CXXFLAGS += -O3 -march=native
 endif
 
 ALL=dotproduct-omp.exe dotproduct-thread.exe \
-    TestProduct.exe TestProduct_opt.exe TestProduct_blockomp.exe
-# bitonic.exe bitonic_thread.exe bhudda.exe bhudda_omp.exe
+    TestProduct.exe TestProduct_opt.exe TestProduct_blockomp.exe \
+    bhudda-omp.exe
+# bitonic.exe bitonic_thread.exe
 
 default: help
 
