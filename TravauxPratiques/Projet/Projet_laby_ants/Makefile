@@ -7,7 +7,8 @@ all_doc: gui_doc project_doc
 clean_all:
 	(cd libgui; make clean)
 	(cd project; make clean)
-	
+	@rm -rf include lib
+
 clobber: clean_all
 	@rm -fr include lib test
 	@(cd libgui; rm -fr doc)
