@@ -33,8 +33,9 @@ $(LIB_DIR)/libgui.so: $(OBJS)
 	@echo "\033[35m Linking " $@ "\033[0m"
 	$(CXX) -shared $(CXXOPT) -L$(OPENGLLIBROOT)  -o $@ $(OBJS) -L$(LIB_DIR)  -Wl,-rpath=$(LIB_DIR) --enable-new-dtags -lglut -lGLU -lGL 
 
-thirdparty:
-	(cd thirdparty; ./install.sh)
+thirdparty: $(LIB_DIR)/libglut.so
+$(LIB_DIR)/libglut.so: thirdparty/freeglut-3.0.0.tar.gz
+	(cd thirdparty; sh ./install.sh)
 
 doc:
 	doxygen Doxyfile.in
@@ -47,10 +48,11 @@ $(TST_DIR)/test_rendering.exe: $(LIB_DIR)/libgui.so test/test_rendering.cpp
 	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR)  -I$(PROJECT_ROOT)/include -o $@ $^ -Wl,-rpath=$(LIB_DIR)  -lgui -lglut -lGLU -lGL
 
 clean:
-	@rm -f $(OBJ_DIR)/*.o
+	@rm -rf $(OBJ_DIR)/
 	@rm -f $(SRC_DIR)/*~
-	@rm -f $(INCL_DIR)/*~
-	@rm -f $(TST_DIR)/
+	@rm -rf $(INCL_DIR)/
+	@rm -rf $(TST_DIR)/
+	@rm -rf thirdparty/build thirdparty/freeglut-3.0.0
 
 # Les dépendances :
 $(OBJ_DIR)/context.o: $(INCL_DIR)/context.hpp $(SRC_DIR)/context.cpp 
