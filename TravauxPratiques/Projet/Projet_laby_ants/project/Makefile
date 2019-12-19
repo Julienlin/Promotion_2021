@@ -35,7 +35,8 @@ $(PROJECT_ROOT)/include:
 
 $(LIB_DIR)/libsimants.so: $(OBJS)
 	@echo "\033[35m Linking " $@ "\033[0m"
-	@$(CXX) -shared $(CXXOPT) -L$(OPENGLLIBROOT) -o $@ $(OBJS) -Wl,-rpath=$(LIB_DIR) --enable-new-dtags -lglut -lGLU -lGL 
+#	@$(CXX) -shared $(CXXOPT) -L$(OPENGLLIBROOT) -o $@ $(OBJS) -Wl,-rpath=$(LIB_DIR) --enable-new-dtags -lglut -lGLU -lGL 
+	@$(CXX) -shared $(CXXOPT) -L$(OPENGLLIBROOT) -o $@ $(OBJS) -Wl,-rpath $(LIB_DIR) --enable-new-dtags $(OPENGLLDFLAGS) 
 
 
 doc:
@@ -46,7 +47,8 @@ test: $(TST_DIR)/ant_simu.exe
 $(TST_DIR)/ant_simu.exe: $(LIB_DIR)/libgui.so $(LIB_DIR)/libsimants.so $(SRC_DIR)/ant_simu.cpp
 	@mkdir -p $(TST_DIR)
 	@echo "\033[34m Compiling " $@ "\033[0m"
-	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR) -I$(INCL_DIR) -o $@ $^ -Wl,-rpath=$(LIB_DIR) -lgui -lsimants -lglut -lGLU -lGL
+#	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR) -I$(INCL_DIR) -o $@ $^ -Wl,-rpath=$(LIB_DIR) -lgui -lsimants -lglut -lGLU -lGL
+	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR) -I$(INCL_DIR) -o $@ $^ -Wl,-rpath $(LIB_DIR) $(OPENGLLDFLAGS) -lsimants
 
 clean:
 	@rm -f $(OBJ_DIR)/*.o

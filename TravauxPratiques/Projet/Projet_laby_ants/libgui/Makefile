@@ -22,6 +22,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo "\033[33m Compiling " $@ "\033[0m"
 	@$(CXX) $(CXXOPT) -I$(PROJECT_ROOT)/libgui/include -I$(INCL_DIR) -I$(PROJECT_ROOT)/include -I$(OPENGLINC) -c $< -o $@
 
+#all: $(PROJECT_ROOT)/include $(LIB_DIR)/libgui.so test
 all: thirdparty $(PROJECT_ROOT)/include $(LIB_DIR)/libgui.so test
 
 $(PROJECT_ROOT)/include:
@@ -31,11 +32,15 @@ $(PROJECT_ROOT)/include:
 
 $(LIB_DIR)/libgui.so: $(OBJS)
 	@echo "\033[35m Linking " $@ "\033[0m"
-	$(CXX) -shared $(CXXOPT) -L$(OPENGLLIBROOT)  -o $@ $(OBJS) -L$(LIB_DIR)  -Wl,-rpath=$(LIB_DIR) --enable-new-dtags -lglut -lGLU -lGL 
-
+#	$(CXX) -shared $(CXXOPT) -L$(OPENGLLIBROOT)  -o $@ $(OBJS) -L$(LIB_DIR)  -Wl,-rpath=$(LIB_DIR) --enable-new-dtags -lglut -lGLU -lGL 
+	$(CXX) -shared $(CXXOPT) -o $@ $(OBJS) -L$(LIB_DIR)  -Wl,-rpath $(LIB_DIR) --enable-new-dtags $(OPENGLLDFLAGS)
+#	$(CXX) -shared $(CXXOPT) -L$(OPENGLLIBROOT)  -o $@ $(OBJS) -L$(LIB_DIR)  --enable-new-dtags -framework OpenGL -lglut
 thirdparty: $(LIB_DIR)/libglut.so
 $(LIB_DIR)/libglut.so: thirdparty/freeglut-3.0.0.tar.gz
+ifdef NOTHIRDPARTY
+else
 	(cd thirdparty; sh ./install.sh)
+endif
 
 doc:
 	doxygen Doxyfile.in
@@ -45,7 +50,8 @@ test: $(TST_DIR)/test_rendering.exe
 $(TST_DIR)/test_rendering.exe: $(LIB_DIR)/libgui.so test/test_rendering.cpp
 	@mkdir -p $(TST_DIR)
 	@echo "\033[34m Compiling " $@ "\033[0m"
-	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR)  -I$(PROJECT_ROOT)/include -o $@ $^ -Wl,-rpath=$(LIB_DIR)  -lgui -lglut -lGLU -lGL
+#	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR)  -I$(PROJECT_ROOT)/include -o $@ $^ -Wl,-rpath=$(LIB_DIR)  -lgui -lglut -lGLU -lGL
+	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR)  -I$(PROJECT_ROOT)/include -o $@ $^ -Wl,-rpath $(LIB_DIR) $(OPENGLLDFLAGS) 
 
 clean:
 	@rm -rf $(OBJ_DIR)/
