@@ -11,7 +11,7 @@ LIB_DIR = $(PROJECT_ROOT)/lib
 TST_DIR = $(PROJECT_ROOT)/test
 
 HEADERS = \
-	$(INCL_DIR)/labyrinthe.hpp $(INCL_DIR)/ant.hpp $(INCL_DIR)/display.hpp $(INCL_DIR)/pheronome.hpp
+	$(INCL_DIR)/labyrinthe.hpp $(INCL_DIR)/ant.hpp $(INCL_DIR)/display.hpp $(INCL_DIR)/pheromone.hpp
 
 SRCS = \
 	$(SRC_DIR)/labyrinthe.cpp $(SRC_DIR)/ant.cpp $(SRC_DIR)/display.cpp

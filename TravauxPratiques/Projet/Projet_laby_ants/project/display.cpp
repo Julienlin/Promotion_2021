@@ -10,7 +10,7 @@
 
 const double h = h_scal;
 
-display_t::display_t( const labyrinthe& laby, const pheronome& phen, const position_t& pos_nest,
+display_t::display_t( const labyrinthe& laby, const pheromone& phen, const position_t& pos_nest,
                       const position_t& pos_food, const std::vector< ant >& ants, gui::window& win )
     : m_ref_laby( laby ),
       m_ref_phen( phen ),

@@ -3,14 +3,14 @@
 #include <utility>
 # include <vector>
 #include "fractal_land.hpp"
-#include "pheronome.hpp"
+#include "pheromone.hpp"
 #include "ant.hpp"
 # include "gui/window.hpp"
 # include "gui/point.hpp"
 
 struct display_t
 {
-    display_t( const fractal_land& land, const pheronome& phen, 
+    display_t( const fractal_land& land, const pheromone& phen, 
                const position_t& pos_nest, const position_t& pos_food,
                const std::vector<ant>& ants, gui::window& win );
     display_t(const display_t& ) = delete;
@@ -20,7 +20,7 @@ struct display_t
 private:
     struct graph_context;
     const fractal_land& m_ref_land;
-    const pheronome& m_ref_phen;
+    const pheromone& m_ref_phen;
     const position_t& m_pos_nest;
     const position_t& m_pos_food;
     const std::vector<ant>& m_ref_ants;

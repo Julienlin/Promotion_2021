@@ -3,14 +3,14 @@
 #include <utility>
 # include <vector>
 # include "labyrinthe.hpp"
-# include "pheronome.hpp"
+# include "pheromone.hpp"
 # include "ant.hpp"
 # include "gui/window.hpp"
 # include "gui/segment.hpp"
 
 struct display_t
 {
-    display_t( const labyrinthe& laby, const pheronome& phen, 
+    display_t( const labyrinthe& laby, const pheromone& phen, 
                const position_t& pos_nest, const position_t& pos_food,
                const std::vector<ant>& ants, gui::window& win );
     display_t(const display_t& ) = delete;
@@ -20,7 +20,7 @@ struct display_t
 private:
     struct graph_context;
     const labyrinthe& m_ref_laby;
-    const pheronome& m_ref_phen;
+    const pheromone& m_ref_phen;
     const position_t& m_pos_nest;
     const position_t& m_pos_food;
     const std::vector<ant>& m_ref_ants;

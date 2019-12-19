@@ -6,7 +6,7 @@
 #include "gui/segment.hpp"
 #include "gui/triangle.hpp"
 
-display_t::display_t( const fractal_land& land, const pheronome& phen, const position_t& pos_nest,
+display_t::display_t( const fractal_land& land, const pheromone& phen, const position_t& pos_nest,
                       const position_t& pos_food, const std::vector< ant >& ants, gui::window& win )
     : m_ref_land( land ),
       m_ref_phen( phen ),

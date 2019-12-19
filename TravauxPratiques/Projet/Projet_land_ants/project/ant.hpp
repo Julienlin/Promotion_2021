@@ -2,7 +2,7 @@
 #ifndef _ANT_HPP_
 # define _ANT_HPP_
 # include <utility>
-# include "pheronome.hpp"
+# include "pheromone.hpp"
 # include "fractal_land.hpp"
 # include "basic_types.hpp"
 
@@ -26,7 +26,7 @@ public:
     const position_t& get_position() const { return m_position; }
     static void set_exploration_coef(double eps) { m_eps = eps; }
 
-    void advance( pheronome& phen, const fractal_land& land,
+    void advance( pheromone& phen, const fractal_land& land,
                   const position_t& pos_food, const position_t& pos_nest, std::size_t& cpteur_food );
 
 private:

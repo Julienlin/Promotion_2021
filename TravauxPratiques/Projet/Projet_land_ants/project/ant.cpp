@@ -4,7 +4,7 @@
 
 double ant::m_eps = 0.;
 
-void ant::advance( pheronome& phen, const fractal_land& land, const position_t& pos_food, const position_t& pos_nest,
+void ant::advance( pheromone& phen, const fractal_land& land, const position_t& pos_food, const position_t& pos_nest,
                    std::size_t& cpteur_food ) 
 {
     std::random_device                       rd;  // Will be used to obtain a seed for the random number engine
@@ -45,7 +45,7 @@ void ant::advance( pheronome& phen, const fractal_land& land, const position_t& 
                 new_pos_ant.second += 1;
         }
         consumed_time += land( new_pos_ant.first, new_pos_ant.second);
-        phen.mark_pheronome( new_pos_ant );
+        phen.mark_pheromone( new_pos_ant );
         m_position = new_pos_ant;
         if ( get_position( ) == pos_nest ) {
             if ( is_loaded( ) ) {

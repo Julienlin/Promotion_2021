@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pheronome',['pheronome',['../classpheronome.html#a3b6c8d15466624602f1227d57d7ad19b',1,'pheronome']]]
+  ['pheromone',['pheronome',['../classpheronome.html#a3b6c8d15466624602f1227d57d7ad19b',1,'pheronome']]]
 ];

@@ -2,7 +2,7 @@
 #ifndef _ANT_HPP_
 # define _ANT_HPP_
 # include <utility>
-# include "pheronome.hpp"
+# include "pheromone.hpp"
 # include "labyrinthe.hpp"
 # include "basic_types.hpp"
 
@@ -27,7 +27,7 @@ public:
     position_t return_to_nest() { position_t p = m_path_to_nest.back(); m_path_to_nest.pop_back(); return p; }
     static void set_exploration_coef(double eps) { m_eps = eps; }
 
-    void advance( pheronome& phen, const labyrinthe& land,
+    void advance( pheromone& phen, const labyrinthe& land,
                   const position_t& pos_food, const position_t& pos_nest, std::size_t& cpteur_food );
 
 private:

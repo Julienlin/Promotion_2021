@@ -127,7 +127,7 @@ Liste des classes\par \pard\plain
 {\b {\b fractal_land} ({\s17\sa60\sb30\widctlpar\qj \fs22\cgrid 
 G\'E9n\'E8re un paysage fractal \'E0 l'aide d'un algorithme pseudo-al\'E9atoire })} \tab {\field\fldedit {\*\fldinst PAGEREF AAAAAAAAAP \\*MERGEFORMAT}{\fldrslt pagenum}}
 \par
-{\b {\b pheronome} ({\s17\sa60\sb30\widctlpar\qj \fs22\cgrid 
+{\b {\b pheromone} ({\s17\sa60\sb30\widctlpar\qj \fs22\cgrid 
 Carte des ph\'E9ronomes })} \tab {\field\fldedit {\*\fldinst PAGEREF AAAAAAAABA \\*MERGEFORMAT}{\fldrslt pagenum}}
 \par
 \par}
@@ -193,7 +193,7 @@ const position_t & {\b get_position} () const {\bkmkstart AAAAAAAAAH}
 \par
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
 
-void {\b advance} ({\b pheronome} &phen, const {\b fractal_land} &land, const position_t &pos_food, const position_t &pos_nest, std::size_t &cpteur_food){\bkmkstart AAAAAAAAAI}
+void {\b advance} ({\b pheromone} &phen, const {\b fractal_land} &land, const position_t &pos_food, const position_t &pos_nest, std::size_t &cpteur_food){\bkmkstart AAAAAAAAAI}
 {\bkmkend AAAAAAAAAI}
 \par
 }
@@ -248,7 +248,7 @@ Fonctions membres publiques\par
 {
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
 
-{\b display_t} (const {\b fractal_land} &land, const {\b pheronome} &phen, const position_t &pos_nest, const position_t &pos_food, const std::vector< {\b ant} > &ants, gui::window &win){\bkmkstart AAAAAAAAAM}
+{\b display_t} (const {\b fractal_land} &land, const {\b pheromone} &phen, const position_t &pos_nest, const position_t &pos_food, const std::vector< {\b ant} > &ants, gui::window &win){\bkmkstart AAAAAAAAAM}
 {\bkmkend AAAAAAAAAM}
 \par
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
@@ -408,9 +408,9 @@ fractal_land.cpp\par
 \pard\plain \sect\sbkpage
 \s2\sb240\sa60\keepn\widctlpar\adjustright \b\f1\fs28\kerning28\cgrid 
 \pard\plain \s2\sb240\sa60\keepn\widctlpar\adjustright \b\f1\fs28\kerning28\cgrid 
-R\'E9f\'E9rence de la classe pheronome\par \pard\plain 
-{\tc\tcl2 \v pheronome}
-{\xe \v pheronome}
+R\'E9f\'E9rence de la classe pheromone\par \pard\plain 
+{\tc\tcl2 \v pheromone}
+{\xe \v pheromone}
 {\bkmkstart AAAAAAAABA}
 {\bkmkend AAAAAAAABA}
 \par
@@ -418,7 +418,7 @@ R\'E9f\'E9rence de la classe pheronome\par \pard\plain
 {\s17\sa60\sb30\widctlpar\qj \fs22\cgrid 
 Carte des ph\'E9ronomes. }}\par
 {
-{\f2 #include <pheronome.hpp>}}\par
+{\f2 #include <pheromone.hpp>}}\par
 \pard\plain \s3\sb240\sa60\keepn\widctlpar\adjustright \b\f1\cgrid 
 Types publics\par
 \pard\plain 
@@ -431,7 +431,7 @@ using {\b size_t} = unsigned long{\bkmkstart AAAAAAAABB}
 \par
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
 
-using {\b pheronome_t} = std::array< double, 2 >{\bkmkstart AAAAAAAABC}
+using {\b pheromone_t} = std::array< double, 2 >{\bkmkstart AAAAAAAABC}
 {\bkmkend AAAAAAAABC}
 \par
 }
@@ -441,7 +441,7 @@ Fonctions membres publiques\par
 
 {
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
-{\b pheronome} (size_t dim, const position_t &pos_food, const position_t &pos_nest, double alpha=0.7, double beta=0.9999)\par
+{\b pheromone} (size_t dim, const position_t &pos_food, const position_t &pos_nest, double alpha=0.7, double beta=0.9999)\par
 {
 \pard\plain \s51\li360\sa60\sb30\qj\widctlpar\qj\adjustright \fs20\cgrid {\i {\s17\sa60\sb30\widctlpar\qj \fs22\cgrid 
 Construit une carte initiale des ph\'E9ronomes. }{
@@ -449,32 +449,32 @@ Construit une carte initiale des ph\'E9ronomes. }{
 }}
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
 
-{\b pheronome} (const {\b pheronome} &)=delete{\bkmkstart AAAAAAAABD}
+{\b pheromone} (const {\b pheronome} &)=delete{\bkmkstart AAAAAAAABD}
 {\bkmkend AAAAAAAABD}
 \par
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
 
-{\b pheronome} ({\b pheronome} &&)=delete{\bkmkstart AAAAAAAABE}
+{\b pheromone} ({\b pheronome} &&)=delete{\bkmkstart AAAAAAAABE}
 {\bkmkend AAAAAAAABE}
 \par
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
 
-pheronome_t & {\b operator()} (size_t i, size_t j){\bkmkstart AAAAAAAABF}
+pheromone_t & {\b operator()} (size_t i, size_t j){\bkmkstart AAAAAAAABF}
 {\bkmkend AAAAAAAABF}
 \par
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
 
-const pheronome_t & {\b operator()} (size_t i, size_t j) const {\bkmkstart AAAAAAAABG}
+const pheromone_t & {\b operator()} (size_t i, size_t j) const {\bkmkstart AAAAAAAABG}
 {\bkmkend AAAAAAAABG}
 \par
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
 
-pheronome_t & {\b operator[]} (const position_t &pos){\bkmkstart AAAAAAAABH}
+pheromone_t & {\b operator[]} (const position_t &pos){\bkmkstart AAAAAAAABH}
 {\bkmkend AAAAAAAABH}
 \par
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
 
-const pheronome_t & {\b operator[]} (const position_t &pos) const {\bkmkstart AAAAAAAABI}
+const pheromone_t & {\b operator[]} (const position_t &pos) const {\bkmkstart AAAAAAAABI}
 {\bkmkend AAAAAAAABI}
 \par
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
@@ -484,7 +484,7 @@ void {\b do_evaporation} (){\bkmkstart AAAAAAAABJ}
 \par
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
 
-void {\b mark_pheronome} (const position_t &pos){\bkmkstart AAAAAAAABK}
+void {\b mark_pheromone} (const position_t &pos){\bkmkstart AAAAAAAABK}
 {\bkmkend AAAAAAAABK}
 \par
 \pard\plain \s80\fi-360\li360\widctlpar\jclisttab\tx360{\*\pn \pnlvlbody\ilvl0\ls1\pnrnot0\pndec }\ls1\adjustright \fs20\cgrid 
@@ -509,11 +509,11 @@ G\'E8re une carte des ph\'E9ronomes avec leurs mis \'E0 jour ( dont l'\'E9vapora
 \pard\plain \s3\sb240\sa60\keepn\widctlpar\adjustright \b\f1\cgrid 
 Documentation des constructeurs et destructeur\par
 \pard\plain 
-{\xe \v pheronome\:pheronome}
-{\xe \v pheronome\:pheronome}
+{\xe \v pheromone\:pheronome}
+{\xe \v pheromone\:pheronome}
 \pard\plain \s4\sb240\sa60\keepn\widctlpar\adjustright \b\f1\fs20\cgrid {
 {\b 
-pheronome::pheronome (size_t  {\i dim}, const position_t &  {\i pos_food}, const position_t &  {\i pos_nest}, double  {\i alpha} = {\f2 0.7}, double  {\i beta} = {\f2 0.9999}){\f2 [inline]}}}
+pheromone::pheronome (size_t  {\i dim}, const position_t &  {\i pos_food}, const position_t &  {\i pos_nest}, double  {\i alpha} = {\f2 0.7}, double  {\i beta} = {\f2 0.9999}){\f2 [inline]}}}
 \par
 {\bkmkstart AAAAAAAABM}
 {\bkmkend AAAAAAAABM}
@@ -550,7 +550,7 @@ Param\'E8tres:\par}
 {\pard\widctlpar\brdrb\brdrs\brdrw5\brsp20 \adjustright \par}
 La documentation de cette classe a \'E9t\'E9 g\'E9n\'E9r\'E9e \'E0 partir du fichier suivant :{\par
 \pard\plain \s81\fi-360\li720\widctlpar\jclisttab\tx720{\*\pn \pnlvlbody\ilvl0\ls2\pnrnot0\pndec }\ls2\adjustright \fs20\cgrid 
-pheronome.hpp\par
+pheromone.hpp\par
 }
 \pard\plain \sect\sbkpage
 \s1\sb240\sa60\keepn\widctlpar\adjustright \b\f1\fs36\kerning36\cgrid 

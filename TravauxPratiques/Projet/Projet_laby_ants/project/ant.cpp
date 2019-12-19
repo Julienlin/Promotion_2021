@@ -4,7 +4,7 @@
 
 double ant::m_eps = 0.;
 
-void ant::advance( pheronome& phen, const labyrinthe& laby, const position_t& pos_food, const position_t& pos_nest,
+void ant::advance( pheromone& phen, const labyrinthe& laby, const position_t& pos_food, const position_t& pos_nest,
                    std::size_t& cpteur_food ) {
     std::random_device                       rd;  // Will be used to obtain a seed for the random number engine
     std::mt19937                             gen( rd( ) );  // Standard mersenne_twister_engine seeded with rd()
@@ -84,7 +84,7 @@ void ant::advance( pheronome& phen, const labyrinthe& laby, const position_t& po
             else  // if (north_phen == max_phen)
                 new_pos_ant.first += 1;
         }
-        phen.mark_pheronome( new_pos_ant, laby );
+        phen.mark_pheromone( new_pos_ant, laby );
         m_path_to_nest.emplace_back( new_pos_ant );
         if ( get_position( ) == pos_food ) { set_loaded( ); }
         if (get_position() == pos_nest) { cur_life = max_life; }

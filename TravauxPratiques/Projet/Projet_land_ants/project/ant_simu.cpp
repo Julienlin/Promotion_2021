@@ -3,7 +3,7 @@
 #include <random>
 #include "fractal_land.hpp"
 #include "ant.hpp"
-#include "pheronome.hpp"
+#include "pheromone.hpp"
 # include "gui/context.hpp"
 # include "gui/colors.hpp"
 # include "gui/point.hpp"
@@ -13,7 +13,7 @@
 # include "gui/event_manager.hpp"
 # include "display.hpp"
 
-void advance_time( const fractal_land& land, pheronome& phen, 
+void advance_time( const fractal_land& land, pheromone& phen, 
                    const position_t& pos_nest, const position_t& pos_food,
                    std::vector<ant>& ants, std::size_t& cpteur )
 {
@@ -63,7 +63,7 @@ int main(int nargs, char* argv[])
     for ( size_t i = 0; i < nb_ants; ++i )
         ants.push_back({{ant_pos(gen),ant_pos(gen)}});
     // On crée toutes les fourmis dans la fourmilière.
-    pheronome phen(land.dimensions(), pos_food, pos_nest, alpha, beta);
+    pheromone phen(land.dimensions(), pos_food, pos_nest, alpha, beta);
 
     gui::context graphic_context(nargs, argv);
     gui::window& win =  graphic_context.new_window(2*land.dimensions()+10,land.dimensions()+266);

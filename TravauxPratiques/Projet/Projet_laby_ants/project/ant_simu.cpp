@@ -3,7 +3,7 @@
 #include <random>
 #include "labyrinthe.hpp"
 #include "ant.hpp"
-#include "pheronome.hpp"
+#include "pheromone.hpp"
 # include "gui/context.hpp"
 # include "gui/colors.hpp"
 # include "gui/point.hpp"
@@ -13,7 +13,7 @@
 # include "gui/event_manager.hpp"
 # include "display.hpp"
 
-void advance_time( const labyrinthe& land, pheronome& phen, 
+void advance_time( const labyrinthe& land, pheromone& phen, 
                    const position_t& pos_nest, const position_t& pos_food,
                    std::vector<ant>& ants, std::size_t& cpteur )
 {
@@ -49,7 +49,7 @@ int main(int nargs, char* argv[])
     for ( size_t i = 0; i < nb_ants; ++i )
         ants.emplace_back(pos_nest, life);
     // On crée toutes les fourmis dans la fourmilière.
-    pheronome phen(laby.dimensions(), pos_food, pos_nest, alpha, beta);
+    pheromone phen(laby.dimensions(), pos_food, pos_nest, alpha, beta);
 
     gui::context graphic_context(nargs, argv);
     gui::window& win =  graphic_context.new_window(h_scal*laby.dimensions().second,h_scal*laby.dimensions().first+266);
