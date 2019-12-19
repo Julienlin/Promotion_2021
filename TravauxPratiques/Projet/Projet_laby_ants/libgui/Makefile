@@ -22,8 +22,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo "\033[33m Compiling " $@ "\033[0m"
 	@$(CXX) $(CXXOPT) -I$(PROJECT_ROOT)/libgui/include -I$(INCL_DIR) -I$(PROJECT_ROOT)/include -I$(OPENGLINC) -c $< -o $@
 
-#all: $(PROJECT_ROOT)/include $(LIB_DIR)/libgui.so test
-all: thirdparty $(PROJECT_ROOT)/include $(LIB_DIR)/libgui.so test
+all: $(PROJECT_ROOT)/include $(LIB_DIR)/libgui.so test
+#all: thirdparty $(PROJECT_ROOT)/include $(LIB_DIR)/libgui.so test
 
 $(PROJECT_ROOT)/include:
 	@mkdir -p $(PROJECT_ROOT)/include
