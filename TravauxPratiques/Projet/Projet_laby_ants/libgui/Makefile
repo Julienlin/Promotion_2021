@@ -37,7 +37,7 @@ $(LIB_DIR)/libgui.so: $(OBJS)
 #	$(CXX) -shared $(CXXOPT) -L$(OPENGLLIBROOT)  -o $@ $(OBJS) -L$(LIB_DIR)  --enable-new-dtags -framework OpenGL -lglut
 thirdparty: $(LIB_DIR)/libglut.so
 $(LIB_DIR)/libglut.so: thirdparty/freeglut-3.0.0.tar.gz
-ifdef NOTHIRDPARTY
+ifdef OSX
 else
 	(cd thirdparty; sh ./install.sh)
 endif
