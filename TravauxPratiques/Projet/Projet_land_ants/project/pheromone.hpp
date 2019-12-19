@@ -40,10 +40,10 @@ public:
         m_map_of_pheromone[index(pos_food)][0] = 1.;
         m_map_of_pheromone[index(pos_nest)][1] = 1.;
         cl_update( );
-        m_buffer_pheromone = m_map_of_pheronome;
+        m_buffer_pheromone = m_map_of_pheromone;
     }
-    pheromone( const pheronome& ) = delete;
-    pheromone( pheronome&& )      = delete;
+    pheromone( const pheromone& ) = delete;
+    pheromone( pheromone&& )      = delete;
     ~pheromone( )                 = default;
 
     pheromone_t& operator( )( size_t i, size_t j ) {
@@ -99,7 +99,7 @@ public:
     }
 
     void update( ) {
-        m_map_of_pheromone.swap( m_buffer_pheronome );
+        m_map_of_pheromone.swap( m_buffer_pheromone );
         cl_update( );
         m_map_of_pheromone[( m_pos_food.first + 1 ) * m_stride + m_pos_food.second + 1][0] = 1;
         m_map_of_pheromone[( m_pos_nest.first + 1 ) * m_stride + m_pos_nest.second + 1][1] = 1;
@@ -127,7 +127,7 @@ private:
     }
     unsigned long              m_dim, m_stride;
     double                     m_alpha, m_beta;
-    std::vector< pheromone_t > m_map_of_pheronome, m_buffer_pheronome;
+    std::vector< pheromone_t > m_map_of_pheromone, m_buffer_pheromone;
     position_t m_pos_nest, m_pos_food;
 };
 
