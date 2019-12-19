@@ -1,7 +1,7 @@
 # Makefile principal
 # VARIABLES POUVANT ETRE REDEFINIS PAR L'UTILISATEUR
 # DIRECTORY OU EST INSTALLE LE PROJET :
-PROJECT_ROOT = /Users/d579702/Documents/enseignement/ensta_parallel/Promotion_2021/TravauxPratiques/Projet/Projet_laby_ants
+PROJECT_ROOT = $(CURDIR)/..
 ##############################################################
 @export NOTHIRDPARTY=1
 # Compilateur utilise
