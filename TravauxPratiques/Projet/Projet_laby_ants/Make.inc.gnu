@@ -1,7 +1,7 @@
 # Makefile principal
 # VARIABLES POUVANT ETRE REDEFINIS PAR L'UTILISATEUR
 # DIRECTORY OU EST INSTALLE LE PROJET :
-PROJECT_ROOT = 
+PROJECT_ROOT = $(CURDIR)/..
 ##############################################################
 # Compilateur utilise
 CXX = g++
