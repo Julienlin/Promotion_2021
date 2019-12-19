@@ -45,7 +45,7 @@ test: $(TST_DIR)/test_rendering.exe
 $(TST_DIR)/test_rendering.exe: $(LIB_DIR)/libgui.so test/test_rendering.cpp
 	@mkdir -p $(TST_DIR)
 	@echo "\033[34m Compiling " $@ "\033[0m"
-	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR)  -I$(PROJECT_ROOT)/include -o $@ $^ -Wl,-rpath=$(LIB_DIR)  -lgui -lglut -lGLU -lGL
+	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR)  -I$(PROJECT_ROOT)/include -o $@ $^ -Wl,-rpath=$(LIB_DIR)  -lgui -lglut -lGLU -lGL -lgui
 
 clean:
 	@rm -rf $(OBJ_DIR)/

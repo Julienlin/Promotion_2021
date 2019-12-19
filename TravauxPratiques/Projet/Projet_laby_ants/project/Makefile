@@ -48,7 +48,7 @@ $(TST_DIR)/ant_simu.exe: $(LIB_DIR)/libgui.so $(LIB_DIR)/libsimants.so $(SRC_DIR
 	@mkdir -p $(TST_DIR)
 	@echo "\033[34m Compiling " $@ "\033[0m"
 #	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR) -I$(INCL_DIR) -o $@ $^ -Wl,-rpath=$(LIB_DIR) -lgui -lsimants -lglut -lGLU -lGL
-	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR) -I$(INCL_DIR) -o $@ $^ -Wl,-rpath $(LIB_DIR) $(OPENGLLDFLAGS) -lsimants
+	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR) -I$(INCL_DIR) -o $@ $^ -Wl,-rpath $(LIB_DIR) $(OPENGLLDFLAGS) -lsimants -lgui
 
 clean:
 	@rm -f $(OBJ_DIR)/*.o

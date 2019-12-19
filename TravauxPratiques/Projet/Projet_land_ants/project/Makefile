@@ -51,7 +51,7 @@ $(TST_DIR)/test_fractal_land.exe: $(LIB_DIR)/libgui.so $(LIB_DIR)/libsimants.so 
 $(TST_DIR)/ant_simu.exe: $(LIB_DIR)/libgui.so $(LIB_DIR)/libsimants.so $(SRC_DIR)/ant_simu.cpp
 	@mkdir -p $(TST_DIR)
 	@echo "\033[34m Compiling " $@ "\033[0m"
-	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR) -I$(INCL_DIR) -o $@ $^ -Wl,-rpath=$(LIB_DIR) -lgui -lsimants -lglut -lGLU -lGL
+	@$(CXX) $(CXXOPT) -I$(OPENGLINC) -L$(OPENGLLIBROOT) -L$(LIB_DIR) -I$(INCL_DIR) -o $@ $^ -Wl,-rpath=$(LIB_DIR) -lgui -lsimants -lglut -lGLU -lGL -lgui
 
 clean:
 	@rm -f $(OBJ_DIR)/*.o
@@ -65,4 +65,4 @@ $(OBJ_DIR)/ant.o: $(SRC_DIR)/fractal_land.hpp $(SRC_DIR)/ant.hpp $(SRC_DIR)/ant.
 $(OBJ_DIR)/display.o: $(SRC_DIR)/fractal_land.hpp $(SRC_DIR)/ant.hpp $(SRC_DIR)/display.cpp
 
 .PHONY: $(PROJECT_ROOT)/include doc
-	
+
