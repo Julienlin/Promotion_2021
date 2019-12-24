@@ -18,10 +18,16 @@ gui:
 	@mkdir -p lib
 	@mkdir -p include
 	(cd libgui; make)
+project: gui
 	(cd project; make)
+
+thirdparty:
+	(cd libgui; make thirdparty)
 
 gui_doc:
 	@mkdir -p lib
 	@mkdir -p include
 	(cd libgui; make doc)
 	(cd project; make doc)
+
+.PHONY: project all gui thirdparty
