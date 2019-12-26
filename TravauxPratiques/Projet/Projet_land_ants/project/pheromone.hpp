@@ -70,6 +70,11 @@ public:
             }
     }
 
+        ///
+        /// \fn void mark_pheromone( const position_t& pos )
+        /// \param pos position of the cell
+        /// \brief function used by ants to perfom pheromone update when they are on a cell
+        ///
     void mark_pheromone( const position_t& pos ) {
       std::size_t i = pos.first;
       std::size_t j = pos.second;
