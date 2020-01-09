@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <random>
+#include <chrono>
 #include "fractal_land.hpp"
 #include "ant.hpp"
 #include "pheromone.hpp"
@@ -70,13 +71,41 @@ int main(int nargs, char* argv[])
     display_t displayer( land, phen, pos_nest, pos_food, ants, win );
     // Compteur de la quantité de nourriture apportée au nid par les fourmis
     size_t food_quantity = 0;
+    std::chrono::duration<double> tot;
+    int ind=0;
+    int SIZE_VEC = 2000;
+    std::vector<std::chrono::duration<double,std::ratio<1, 1000>>> duration_advance(SIZE_VEC);
+    std::vector<std::chrono::duration<double,std::ratio<1, 1000>>> duration_display(SIZE_VEC);
 
     gui::event_manager manager;
     manager.on_key_event(int('q'), [] (int code) { exit(0); });
+    manager.on_key_event(int('t'), [&] (int code) { std::cout << "Iteration : " << ind << std::endl
+                                                             << "Advance time : " << duration_advance[ind-1].count() << "ms" << std::endl
+                                                             << "Display time : " << duration_display[ind-1].count() << "ms" << std::endl
+                                                             << "Total time : " << tot.count() << "s" << std::endl;
+    });
     manager.on_display([&] { displayer.display(food_quantity); win.blit(); });
-    manager.on_idle([&] () { 
+    manager.on_idle([&] () {
+        auto start = std::chrono::high_resolution_clock::now();
         advance_time(land, phen, pos_nest, pos_food, ants, food_quantity);
-        displayer.display(food_quantity); 
+        auto end = std::chrono::high_resolution_clock::now();
+        if (ind> SIZE_VEC ) {
+            duration_advance.push_back(end - start);
+        }
+        else{
+            duration_advance[ind] = end - start;
+        }
+        start = std::chrono::high_resolution_clock::now();
+        displayer.display(food_quantity);
+        end = std::chrono::high_resolution_clock::now();
+        if (ind> SIZE_VEC ) {
+            duration_display.push_back(end - start);
+        }
+        else{
+            duration_display[ind] = end - start;
+        }
+        tot += duration_advance[ind] + duration_display[ind];
+        ind++;
         win.blit(); 
     });
     manager.loop();
