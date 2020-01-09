@@ -80,9 +80,9 @@ int main(int nargs, char* argv[])
     gui::event_manager manager;
     manager.on_key_event(int('q'), [] (int code) { exit(0); });
     manager.on_key_event(int('t'), [&] (int code) { std::cout << "Iteration : " << ind << std::endl
-                                                             << "Advance time : " << duration_advance[ind-1].count() << "ms" << std::endl
-                                                             << "Display time : " << duration_display[ind-1].count() << "ms" << std::endl
-                                                             << "Total time : " << tot.count() << "s" << std::endl;
+                                                             << "Advance time : " << duration_advance[ind-1].count() << " ms" << std::endl
+                                                             << "Display time : " << duration_display[ind-1].count() << " ms" << std::endl
+                                                             << "Total time : " << tot.count() << " s" << std::endl;
     });
     manager.on_display([&] { displayer.display(food_quantity); win.blit(); });
     manager.on_idle([&] () {
