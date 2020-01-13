@@ -348,3 +348,4 @@ TSWLatexianTemp*
 
 # other files
 TravauxPratiques/Projet/Projet_land_ants/include/*
+*.ccls-cache/*
