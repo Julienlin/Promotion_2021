@@ -102,7 +102,7 @@ int main(int nargs, char *argv[]) {
   display_t displayer(land, phen, pos_nest, pos_food, ants, win);
   // Compteur de la quantité de nourriture apportée au nid par les fourmis
   size_t food_quantity = 0;
-  int ind = 0;
+  int ind_advance = 0, ind_display = 0;
   int SIZE_VEC = 3000;
   std::vector<std::chrono::duration<double, ratio>> duration_advance(SIZE_VEC);
   std::vector<std::chrono::duration<double, ratio>> duration_display(SIZE_VEC);
@@ -111,14 +111,14 @@ int main(int nargs, char *argv[]) {
   gui::event_manager manager;
   manager.on_key_event(int('q'), [](int code) { exit(0); });
   manager.on_key_event(int('t'), [&](int code) {
-    std::cout << "Iteration : " << ind << std::endl
-              << "Advance time : " << duration_advance[ind - 1].count() << " ms"
+    std::cout << "Iteration : " << ind_advance << std::endl
+              << "Advance time : " << duration_advance[ind_advance - 1].count() << " ms"
               << ", average : "
               << utils::avg<std::chrono::duration<double, ratio>>(
-                     duration_advance, ind)
+                     duration_advance, ind_advance)
                      .count()
               << " ms" << std::endl
-              << "Display time : " << duration_display[ind - 1].count() << " ms"
+              << "Display time : " << duration_display[ind_display - 1].count() << " ms"
               << std::endl
               << "Total time : " << tot.count() / 1000 << " s" << std::endl;
     if (!is_first_time) {
@@ -133,29 +133,31 @@ int main(int nargs, char *argv[]) {
   });
   manager.on_idle([&]() {
 
-#pragma omp parallel
+#pragma omp parallel shared(ind_advance)
     {
       auto start = std::chrono::high_resolution_clock::now();
       advance_time(land, phen, pos_nest, pos_food, ants, food_quantity,
                    first_food_time, is_first_time);
       auto end = std::chrono::high_resolution_clock::now();
-      if (ind > SIZE_VEC) {
+      if (ind_advance > SIZE_VEC) {
         duration_advance.push_back(end - start);
       } else {
-        duration_advance[ind] = end - start;
+        duration_advance[ind_advance] = end - start;
       }
+      // #pragma omp atomic
+      ind_advance++;
 #pragma omp master
       {
         start = std::chrono::high_resolution_clock::now();
         displayer.display(food_quantity);
         end = std::chrono::high_resolution_clock::now();
-        if (ind > SIZE_VEC) {
+        if (ind_display > SIZE_VEC) {
           duration_display.push_back(end - start);
         } else {
-          duration_display[ind] = end - start;
+          duration_display[ind_display] = end - start;
         }
-        tot += duration_advance[ind] + duration_display[ind];
-        ind++;
+        tot += duration_advance[ind_display] + duration_display[ind_display];
+        ind_display++;
         win.blit();
       }
     }
