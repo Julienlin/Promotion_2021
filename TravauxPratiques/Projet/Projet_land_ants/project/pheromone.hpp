@@ -6,6 +6,7 @@
 #include <iostream>
 #include <utility>
 #include <vector>
+#include <omp.h>
 #include "basic_types.hpp"
 
 /**
@@ -63,6 +64,7 @@ public:
     }
 
     void do_evaporation( ) {
+        #pragma omp parallel for
         for ( std::size_t i = 1; i <= m_dim; ++i )
             for ( std::size_t j = 1; j <= m_dim; ++j ) {
                 m_buffer_pheromone[i * m_stride + j][0] *= m_beta;
@@ -123,6 +125,7 @@ private:
      */
     void cl_update( ) {
         // On mets tous les bords à -1 pour les marquer comme indésirables :
+        #pragma omp parallel for
         for ( unsigned long j = 0; j < m_stride; ++j ) {
             m_map_of_pheromone[j]                            = {{-1., -1.}};
             m_map_of_pheromone[j + m_stride * ( m_dim + 1 )] = {{-1., -1.}};
