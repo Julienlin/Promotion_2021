@@ -111,33 +111,36 @@ int main(int nargs, char *argv[]) {
     MPI_Bcast(&fract_dim, 1, MPI_UNSIGNED_LONG, 0, comm);
     // Broadcasting fractal data
     MPI_Bcast(land.data(), fract_dim * fract_dim, MPI_DOUBLE, 0, comm);
+    // On crée toutes les fourmis dans la fourmilière.
+    pheromone phen(land.dimensions(), pos_food, pos_nest, alpha, beta);
+    std::vector<ant> ants;
+    ants.reserve(nb_ants);
+    int res_ants,lol=0 ;
 
   } else {
     MPI_Bcast(&fract_dim, 1, MPI_UNSIGNED_LONG, 0, comm);
     std::vector<double> buffer_mpi(fract_dim * fract_dim);
     MPI_Bcast(buffer_mpi.data(), fract_dim * fract_dim, MPI_DOUBLE, 0, comm);
     fractal_land land(fract_dim, buffer_mpi);
+    // On crée toutes les fourmis dans la fourmilière.
+    pheromone phen(land.dimensions(), pos_food, pos_nest, alpha, beta);
+
+    auto start =
+        std::chrono::high_resolution_clock::now(); // Compute init ant time
+
+    // On va créer des fourmis un peu partout sur la carte :
+    std::vector<ant> ants;
+    ants.reserve(nb_ants);
+    std::random_device
+        rd; // Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with
+    std::uniform_int_distribution<size_t> ant_pos(0, land.dimensions() - 1);
+    for (size_t i = 0; i < nb_ants; ++i)
+      ants.push_back({{ant_pos(gen), ant_pos(gen)}});
+    auto end = std::chrono::high_resolution_clock::now();
+    init_ant_time = end - start;
   }
 
-  // // Définition du coefficient d'exploration de toutes les fourmis.
-  // ant::set_exploration_coef(eps);
-  // auto start = std::chrono::high_resolution_clock::now(); // Compute init ant
-  // time
-
-  // // On va créer des fourmis un peu partout sur la carte :
-  // std::vector<ant> ants;
-  // ants.reserve(nb_ants);
-  // std::random_device
-  //     rd; // Will be used to obtain a seed for the random number engine
-  // std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with
-  // rd() std::uniform_int_distribution<size_t> ant_pos(0, land.dimensions() -
-  // 1); for (size_t i = 0; i < nb_ants; ++i)
-  //   ants.push_back({{ant_pos(gen), ant_pos(gen)}});
-  // auto end = std::chrono::high_resolution_clock::now();
-  // init_ant_time = end - start;
-
-  // // On crée toutes les fourmis dans la fourmilière.
-  // pheromone phen(land.dimensions(), pos_food, pos_nest, alpha, beta);
   MPI_Finalize();
   return 0;
 }
