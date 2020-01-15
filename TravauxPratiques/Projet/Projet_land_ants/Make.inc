@@ -6,7 +6,7 @@ PROJECT_ROOT = $(CURDIR)/..
 # /home/juvigny/Cours.d/ParisVI/2017/simants_project
 # VOTRE COMPILATEUR PREFERE ( POUR PARIS 6, g++ suffira normalement )
 CXX = mpic++
-DEBUGOPT = -g -Wall -pedantic -fopenmp
+DEBUGOPT = -g -Wall -pedantic -fopenmp -fdiagnostics-color=always
 OPTIMOPT = -O2 -march=native -fopenmp
 
 CXXOPT = -std=c++11 -fPIC $(DEBUGOPT)
