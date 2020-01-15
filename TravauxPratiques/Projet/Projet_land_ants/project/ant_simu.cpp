@@ -14,6 +14,7 @@
 # include "gui/event_manager.hpp"
 # include "display.hpp"
 #include "utils.hpp"
+#include <mpi.h>
 
 
 using ratio= std::ratio<1, 1000>;
@@ -36,6 +37,26 @@ void advance_time( const fractal_land& land, pheromone& phen,
 
 int main(int nargs, char* argv[])
 {
+ MPI_Init(&nargs, &argv);
+  int rank, nbp;
+  MPI_Comm comm = MPI_COMM_WORLD;
+  MPI_Comm_rank(comm, &rank);
+  MPI_Comm_size(comm, &nbp);
+
+  // Creating communicator for slaves
+  MPI_Group world_group;
+  MPI_Comm_group(comm, &world_group);
+
+  std::vector<int> slaves_ranks(nbp - 1);
+  for (int i = 0; i < nbp - 1; i++) {
+    slaves_ranks[i] = i + 1;
+  }
+
+  MPI_Group slaves_group;
+  MPI_Group_incl(world_group, nbp - 1, slaves_ranks.data(), &slaves_group);
+
+  MPI_Comm slaves_comm;
+  MPI_Comm_create_group(comm, slaves_group, 0, &slaves_comm);
 
     std::chrono::duration<double,ratio> init_fractal_time;
     std::chrono::duration<double,ratio> init_ant_time;
