@@ -62,7 +62,7 @@ int main(int nargs, char *argv[]) {
   std::chrono::time_point<std::chrono::high_resolution_clock> first_food_time;
   std::chrono::time_point<std::chrono::high_resolution_clock> start_finding;
   bool is_first_time = true;
-  const int nb_ants = 5000; // Nombre de fourmis
+  const int nb_ants = rank == 0 ? 5000 : 5000 / (nbp - 1); // Nombre de fourmis
   const double eps = 0.8;   // Coefficient d'exploration
   const double alpha = 0.7; // Coefficient de chaos
   // const double beta=0.9999; // Coefficient d'évaporation
