@@ -110,18 +110,11 @@ int main(int nargs, char *argv[]) {
     // Broadcasting fractal data
     MPI_Bcast(land.data(), fract_dim * fract_dim, MPI_DOUBLE, 0, comm);
 
-    std::cout << "rank : " << rank << "\t" << land(0, 0) << "\t" << land(1, 0)
-              << "\t" << land(2, 0) << "\t" << land(3, 0) << std::endl;
-
   } else {
     MPI_Bcast(&fract_dim, 1, MPI_UNSIGNED_LONG, 0, comm);
     std::vector<double> buffer_mpi(fract_dim * fract_dim);
     MPI_Bcast(buffer_mpi.data(), fract_dim * fract_dim, MPI_DOUBLE, 0, comm);
-    if (rank == 1) {
-      std::cout << "rank : " << rank << "\t"
-                << "land(3,0) : " << buffer_mpi[0] << "\t" << buffer_mpi[1]
-                << "\t" << buffer_mpi[2] << "\t" << buffer_mpi[3] << std::endl;
-    }
+    fractal_land land(fract_dim, buffer_mpi);
   }
 
   // // Définition du coefficient d'exploration de toutes les fourmis.
