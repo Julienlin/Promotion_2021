@@ -72,8 +72,10 @@ int main(int nargs, char *argv[]) {
   // const int i_nest = 256, j_nest = 256;
   // Location de la nourriture
   position_t pos_food{500, 500};
+  // Définition du coefficient d'exploration de toutes les fourmis.
+  ant::set_exploration_coef(eps);
 
-  int nb_ants_loc = nb_ants / (nbp - 1);
+  // int nb_ants_loc = nb_ants / (nbp - 1);
   int size_sub_matrix;
   int fract_dim;
 
