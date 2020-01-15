@@ -38,6 +38,9 @@ public:
     fractal_land( const dim_t& log_size, unsigned long nbSeeds, double deviation, int seed = 0 );
     fractal_land( const fractal_land& ) = delete;
     fractal_land( fractal_land&& land ) = default;
+    fractal_land( dim_t dim, container& cont ) : m_dimensions(dim), m_altitude(){
+        cont.swap(m_altitude);
+    }
     ~fractal_land() = default;
 
     double operator () ( unsigned long i, unsigned long j ) const {
