@@ -110,6 +110,9 @@ public:
         m_map_of_pheromone[( m_pos_nest.first + 1 ) * m_stride + m_pos_nest.second + 1][1] = 1;
     }
 
+        pheromone_t* data() { return m_map_of_pheromone.data(); }
+        pheromone_t* data_buf() { return m_buffer_pheromone.data(); }
+
 private:
     size_t index( const position_t& pos ) const
     {
