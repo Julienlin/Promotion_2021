@@ -41,6 +41,7 @@ int main(int nargs, char *argv[]) {
   MPI_Comm comm = MPI_COMM_WORLD;
   MPI_Comm_rank(comm, &rank);
   MPI_Comm_size(comm, &nbp);
+  int slave_sender = 1;
 
   // Creating communicator for slaves
   MPI_Group world_group;
@@ -137,7 +138,8 @@ int main(int nargs, char *argv[]) {
       displs_pos[i] = displs_pos[i - 1] + 2 * ants_by_proc;
     }
 
-    std::cout << "ants_by_proc : " << ants_by_proc  << "\t" << "nb_ants : "<< nb_ants << std::endl;
+    std::cout << "ants_by_proc : " << ants_by_proc << "\t"
+              << "nb_ants : " << nb_ants << std::endl;
 
     MPI_Gatherv(nullptr, 0, MPI_UNSIGNED_LONG, ants_pos.data(),
                 recvcounts_pos.data(), displs_pos.data(), MPI_UNSIGNED_LONG, 0,
@@ -160,6 +162,18 @@ int main(int nargs, char *argv[]) {
       ant new_ant(ant_state, pos);
       ants[i].swap(new_ant);
     }
+
+    MPI_Status status;
+    // populating phen
+    MPI_Recv(phen_mpi_recv.data(), phen_mpi_recv.size(), MPI_DOUBLE,
+             slave_sender,1, comm, &status);
+    pheromone::pheromone_t *p = phen.data_buf();
+    for (std::size_t i = 0; i < phen_mpi_recv.size(); i += 2) {
+      double *ph = p[i].data();
+      ph[0] = phen_mpi_recv[i];
+      ph[1] = phen_mpi_recv[i + 1];
+    }
+    phen.update();
 
   } else {
     MPI_Bcast(&fract_dim, 1, MPI_UNSIGNED_LONG, 0, comm);
@@ -215,11 +229,20 @@ int main(int nargs, char *argv[]) {
                   phen_mpi_send.size(), MPI_DOUBLE, MPI_MAX, slaves_comm);
 
     p = phen.data_buf();
-    for (std::size_t i = 0; i < phen_mpi_recv.size(); i+=2) {
-      double* ph = p[i].data();
+    for (std::size_t i = 0; i < phen_mpi_recv.size(); i += 2) {
+      double *ph = p[i].data();
       ph[0] = phen_mpi_recv[i];
-      ph[1] = phen_mpi_recv[i+1];
+      ph[1] = phen_mpi_recv[i + 1];
     }
+    phen.update();
+
+    // Sending new pheromone map to master
+    // TODO: choose a slave that send phen map to master
+    if (rank == slave_sender) {
+      MPI_Send(phen_mpi_recv.data(), phen_mpi_recv.size(), MPI_DOUBLE, 0, 1,
+               comm);
+    }
+    MPI_Barrier(comm);
   }
 
   MPI_Finalize();
