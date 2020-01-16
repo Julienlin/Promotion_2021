@@ -41,6 +41,7 @@ int main(int nargs, char *argv[]) {
   MPI_Comm comm = MPI_COMM_WORLD;
   MPI_Comm_rank(comm, &rank);
   MPI_Comm_size(comm, &nbp);
+
   int slave_sender = 1;
 
   // Creating communicator for slaves
@@ -75,7 +76,9 @@ int main(int nargs, char *argv[]) {
   position_t pos_food{500, 500};
   // Définition du coefficient d'exploration de toutes les fourmis.
   ant::set_exploration_coef(eps);
-
+  // Compteur de la quantité de nourriture apportée au nid par les fourmis
+  size_t food_quantity = 0;
+  size_t food_quantity_loc = 0;
   // int nb_ants_loc = nb_ants / (nbp - 1);
   int size_sub_matrix;
   int fract_dim;
@@ -114,8 +117,6 @@ int main(int nargs, char *argv[]) {
                                                           // fractal land time
     init_fractal_time = end - start;
 
-    // put display part here
-
     fract_dim = land.dimensions();
     // Broadcasting fractal dimension
     MPI_Bcast(&fract_dim, 1, MPI_UNSIGNED_LONG, 0, comm);
@@ -128,6 +129,8 @@ int main(int nargs, char *argv[]) {
     phen_mpi_send.resize(2 * (land.dimensions() + 2) * (land.dimensions() + 2));
     std::vector<ant> ants;
     ants.reserve(nb_ants);
+
+    // put display part here
 
     // receiving ants from every proc.
     int ants_by_proc = nb_ants / (nbp - 1);
@@ -166,7 +169,7 @@ int main(int nargs, char *argv[]) {
     MPI_Status status;
     // populating phen
     MPI_Recv(phen_mpi_recv.data(), phen_mpi_recv.size(), MPI_DOUBLE,
-             slave_sender,1, comm, &status);
+             slave_sender, 1, comm, &status);
     pheromone::pheromone_t *p = phen.data_buf();
     for (std::size_t i = 0; i < phen_mpi_recv.size(); i += 2) {
       double *ph = p[i].data();
@@ -174,6 +177,11 @@ int main(int nargs, char *argv[]) {
       ph[1] = phen_mpi_recv[i + 1];
     }
     phen.update();
+
+    MPI_Reduce(&food_quantity_loc,&food_quantity,1, MPI_UNSIGNED_LONG, MPI_SUM, 0,comm);
+
+    MPI_Barrier(comm);
+
 
   } else {
     MPI_Bcast(&fract_dim, 1, MPI_UNSIGNED_LONG, 0, comm);
@@ -186,7 +194,6 @@ int main(int nargs, char *argv[]) {
                           (land.dimensions() + 2));
     phen_mpi_recv.reserve(2 * (land.dimensions() + 2) *
                           (land.dimensions() + 2));
-    MPI_Barrier(comm);
     auto start =
         std::chrono::high_resolution_clock::now(); // Compute init ant time
 
@@ -201,6 +208,13 @@ int main(int nargs, char *argv[]) {
       ants.push_back({{ant_pos(gen), ant_pos(gen)}});
     auto end = std::chrono::high_resolution_clock::now();
     init_ant_time = end - start;
+
+    MPI_Barrier(comm);
+
+    // advance ants part
+    for (std::size_t i = 0; i < ants.size(); i++) {
+      ants[i].advance(phen, land, pos_food, pos_nest, food_quantity_loc);
+    }
 
     // linearize positions
     for (int i = 0; i < nb_ants; i += 2) {
@@ -242,6 +256,8 @@ int main(int nargs, char *argv[]) {
       MPI_Send(phen_mpi_recv.data(), phen_mpi_recv.size(), MPI_DOUBLE, 0, 1,
                comm);
     }
+
+    MPI_Reduce(&food_quantity_loc,&food_quantity,1, MPI_UNSIGNED_LONG, MPI_SUM, 0,comm);
     MPI_Barrier(comm);
   }
 
@@ -252,8 +268,6 @@ int main(int nargs, char *argv[]) {
 // gui::window &win = graphic_context.new_window(2 * land.dimensions() + 10,
 //                                               land.dimensions() + 266);
 // display_t displayer(land, phen, pos_nest, pos_food, ants, win);
-// // Compteur de la quantité de nourriture apportée au nid par les fourmis
-// size_t food_quantity = 0;
 // int ind = 0;
 // int SIZE_VEC = 7000;
 // std::vector<std::chrono::duration<double, ratio>> duration_advance(SIZE_VEC);
