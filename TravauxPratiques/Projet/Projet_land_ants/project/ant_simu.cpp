@@ -79,6 +79,9 @@ int main(int nargs, char *argv[]) {
   int size_sub_matrix;
   int fract_dim;
 
+  std::vector<std::size_t> ants_pos(2 * nb_ants);
+  std::vector<int> ants_state(nb_ants);
+
   if (rank == 0) {
     auto start = std::chrono::high_resolution_clock::now(); // Compute init
                                                             // fractal land time
@@ -111,11 +114,37 @@ int main(int nargs, char *argv[]) {
     MPI_Bcast(&fract_dim, 1, MPI_UNSIGNED_LONG, 0, comm);
     // Broadcasting fractal data
     MPI_Bcast(land.data(), fract_dim * fract_dim, MPI_DOUBLE, 0, comm);
+
+    MPI_Barrier(comm);
     // On crée toutes les fourmis dans la fourmilière.
     pheromone phen(land.dimensions(), pos_food, pos_nest, alpha, beta);
     std::vector<ant> ants;
     ants.reserve(nb_ants);
-    int res_ants,lol=0 ;
+
+    // receiving ants from every proc.
+    int ants_by_proc = nb_ants / (nbp - 1);
+    std::vector<int> recvcounts_pos(nbp, 2 * ants_by_proc);
+    std::vector<int> displs_pos(nbp, 0);
+    recvcounts_pos[0] = 0;
+    for (int i = 2; i < nbp; i++) {
+      displs_pos[i] = displs_pos[i - 1] + 2 * ants_by_proc;
+    }
+
+    std::cout << "displs[nbp-1] : " << displs_pos[nbp - 1] + ants_by_proc
+              << "\n";
+
+    MPI_Gatherv(nullptr, 0, MPI_UNSIGNED_LONG, ants_pos.data(),
+                recvcounts_pos.data(), displs_pos.data(), MPI_UNSIGNED_LONG, 0,
+                comm);
+
+    std::vector<int> recvcounts_state(nbp, ants_by_proc);
+    std::vector<int> displs_state(nbp, 0);
+    recvcounts_state[0] = 0;
+    for (int i = 2; i < nbp; i++) {
+      displs_state[i] = displs_state[i - 1] + ants_by_proc;
+    }
+    MPI_Gatherv(nullptr, 0, MPI_INT, ants_state.data(), recvcounts_state.data(),
+                displs_state.data(), MPI_INT, 0, comm);
 
   } else {
     MPI_Bcast(&fract_dim, 1, MPI_UNSIGNED_LONG, 0, comm);
@@ -125,6 +154,7 @@ int main(int nargs, char *argv[]) {
     // On crée toutes les fourmis dans la fourmilière.
     pheromone phen(land.dimensions(), pos_food, pos_nest, alpha, beta);
 
+    MPI_Barrier(comm);
     auto start =
         std::chrono::high_resolution_clock::now(); // Compute init ant time
 
@@ -135,10 +165,26 @@ int main(int nargs, char *argv[]) {
         rd; // Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with
     std::uniform_int_distribution<size_t> ant_pos(0, land.dimensions() - 1);
-    for (size_t i = 0; i < nb_ants; ++i)
+    for (int i = 0; i < nb_ants; ++i)
       ants.push_back({{ant_pos(gen), ant_pos(gen)}});
     auto end = std::chrono::high_resolution_clock::now();
     init_ant_time = end - start;
+
+    // linearize positions
+    for (int i = 0; i < nb_ants; i += 2) {
+      const position_t pos = ants[i].get_position();
+      ants_pos[i] = pos.first;
+      ants_pos[i + 1] = pos.second;
+    }
+
+    MPI_Gatherv(ants_pos.data(), ants_pos.size(), MPI_UNSIGNED_LONG, nullptr,
+                nullptr, nullptr, MPI_UNSIGNED_LONG, 0, comm);
+
+    for (int i = 0; i < nb_ants; i++) {
+      ants_state[i] = ants[i].is_loaded();
+    }
+    MPI_Gatherv(ants_state.data(), ants_state.size(), MPI_INT, nullptr, nullptr,
+                nullptr, MPI_INT, 0, comm);
   }
 
   MPI_Finalize();
