@@ -146,6 +146,14 @@ int main(int nargs, char *argv[]) {
     MPI_Gatherv(nullptr, 0, MPI_INT, ants_state.data(), recvcounts_state.data(),
                 displs_state.data(), MPI_INT, 0, comm);
 
+    // populating ants with receive data.
+    for (std::size_t i = 0, j = 0; i < ants.size(); i++,j+=2) {
+      ant::state ant_state = ants_state[i] == 0 ? ant::state::unloaded : ant::state::loaded;
+      position_t  pos(ants_pos[j],ants_pos[j+1]) ;
+      ant new_ant(ant_state,pos);
+      ants[i].swap(new_ant);
+    }
+
   } else {
     MPI_Bcast(&fract_dim, 1, MPI_UNSIGNED_LONG, 0, comm);
     std::vector<double> buffer_mpi(fract_dim * fract_dim);
