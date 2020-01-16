@@ -81,6 +81,8 @@ int main(int nargs, char *argv[]) {
 
   std::vector<std::size_t> ants_pos(2 * nb_ants);
   std::vector<int> ants_state(nb_ants);
+  std::vector<double> phen_mpi_send;
+  std::vector<double> phen_mpi_recv;
 
   if (rank == 0) {
     auto start = std::chrono::high_resolution_clock::now(); // Compute init
@@ -88,6 +90,10 @@ int main(int nargs, char *argv[]) {
     // const int i_food = 500, j_food = 500;
     // Génération du territoire 512 x 512 ( 2*(2^8) par direction )
     fractal_land land(8, 2, 1., 1024);
+    phen_mpi_send.reserve(2 * (land.dimensions() + 2) *
+                          (land.dimensions() + 2));
+    phen_mpi_recv.reserve(2 * (land.dimensions() + 2) *
+                          (land.dimensions() + 2));
     double max_val = 0.0;
     double min_val = 0.0;
     for (fractal_land::dim_t i = 0; i < land.dimensions(); ++i)
@@ -118,6 +124,7 @@ int main(int nargs, char *argv[]) {
     MPI_Barrier(comm);
     // On crée toutes les fourmis dans la fourmilière.
     pheromone phen(land.dimensions(), pos_food, pos_nest, alpha, beta);
+    phen_mpi_send.resize(2 * (land.dimensions() + 2) * (land.dimensions() + 2));
     std::vector<ant> ants;
     ants.reserve(nb_ants);
 
@@ -147,10 +154,11 @@ int main(int nargs, char *argv[]) {
                 displs_state.data(), MPI_INT, 0, comm);
 
     // populating ants with receive data.
-    for (std::size_t i = 0, j = 0; i < ants.size(); i++,j+=2) {
-      ant::state ant_state = ants_state[i] == 0 ? ant::state::unloaded : ant::state::loaded;
-      position_t  pos(ants_pos[j],ants_pos[j+1]) ;
-      ant new_ant(ant_state,pos);
+    for (std::size_t i = 0, j = 0; i < ants.size(); i++, j += 2) {
+      ant::state ant_state =
+          ants_state[i] == 0 ? ant::state::unloaded : ant::state::loaded;
+      position_t pos(ants_pos[j], ants_pos[j + 1]);
+      ant new_ant(ant_state, pos);
       ants[i].swap(new_ant);
     }
 
@@ -161,7 +169,10 @@ int main(int nargs, char *argv[]) {
     fractal_land land(fract_dim, buffer_mpi);
     // On crée toutes les fourmis dans la fourmilière.
     pheromone phen(land.dimensions(), pos_food, pos_nest, alpha, beta);
-
+    phen_mpi_send.reserve(2 * (land.dimensions() + 2) *
+                          (land.dimensions() + 2));
+    phen_mpi_recv.reserve(2 * (land.dimensions() + 2) *
+                          (land.dimensions() + 2));
     MPI_Barrier(comm);
     auto start =
         std::chrono::high_resolution_clock::now(); // Compute init ant time
@@ -185,6 +196,7 @@ int main(int nargs, char *argv[]) {
       ants_pos[i + 1] = pos.second;
     }
 
+    // linearizing ant's state
     MPI_Gatherv(ants_pos.data(), ants_pos.size(), MPI_UNSIGNED_LONG, nullptr,
                 nullptr, nullptr, MPI_UNSIGNED_LONG, 0, comm);
 
@@ -193,6 +205,22 @@ int main(int nargs, char *argv[]) {
     }
     MPI_Gatherv(ants_state.data(), ants_state.size(), MPI_INT, nullptr, nullptr,
                 nullptr, MPI_INT, 0, comm);
+
+    // linearizing phen
+    pheromone::pheromone_t *p = phen.data_buf();
+    for (std::size_t i = 0; i < phen_mpi_send.size(); i += 2) {
+      phen_mpi_send[i] = p[i][0];
+      phen_mpi_send[i + 1] = p[i][1];
+    }
+    MPI_Allreduce(phen_mpi_send.data(), phen_mpi_recv.data(),
+                  phen_mpi_send.size(), MPI_DOUBLE, MPI_MAX, slaves_comm);
+
+    p = phen.data_buf();
+    for (std::size_t i = 0; i < phen_mpi_recv.size(); i+=2) {
+      double* ph = p[i].data();
+      ph[0] = phen_mpi_recv[i];
+      ph[1] = phen_mpi_recv[i+1];
+    }
   }
 
   MPI_Finalize();
