@@ -137,8 +137,7 @@ int main(int nargs, char *argv[]) {
       displs_pos[i] = displs_pos[i - 1] + 2 * ants_by_proc;
     }
 
-    std::cout << "displs[nbp-1] : " << displs_pos[nbp - 1] + ants_by_proc
-              << "\n";
+    std::cout << "ants_by_proc : " << ants_by_proc  << "\t" << "nb_ants : "<< nb_ants << std::endl;
 
     MPI_Gatherv(nullptr, 0, MPI_UNSIGNED_LONG, ants_pos.data(),
                 recvcounts_pos.data(), displs_pos.data(), MPI_UNSIGNED_LONG, 0,
