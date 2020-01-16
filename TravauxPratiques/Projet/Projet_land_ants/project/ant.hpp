@@ -29,6 +29,15 @@ public:
     void advance( pheromone& phen, const fractal_land& land,
                   const position_t& pos_food, const position_t& pos_nest, std::size_t& cpteur_food );
 
+        ant(state state, position_t pos): m_state(state), m_position(pos){}
+
+        ant& swap(ant &a){
+            state buff = m_state;
+            m_state = a.m_state;
+            a.m_state = buff;
+            m_position.swap(a.m_position);
+            return *this;
+        }
 private:
     static double m_eps; // Coefficient d'exploration commun à toutes les fourmis.
     state m_state;
